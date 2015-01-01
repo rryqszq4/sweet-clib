@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+
 int main(int argc, char **argv){
 	int sockfd = socket(AF_INET,SOCK_STREAM,0);
 	struct hostent *server = gethostbyname("127.0.0.1");
