@@ -3,6 +3,8 @@
 #define _MAX_SOCKFD_COUNT 65536
 
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -11,7 +13,7 @@
 #include <errno.h>
 #include <sys/ioctl.h>
 #include <sys/time.h>
-#include <string>
+#include <string.h>
 
 using namespace std;
 
@@ -29,7 +31,7 @@ struct UserStatus
 	char cSendbuff[1024]; //发送的数据内容
 	int iBuffLen; //发送数据的长度
 	unsigned int uEpollEvents; 
-}
+};
 
 class EpollClient {
 	public:
