@@ -2,7 +2,11 @@
 
 int main(int argc, char *argv[])
 {
-	EpollClient *pCEpollClient = new EpollClient(2,"127.0.0.1",8021);
+	if (argc < 2){
+		fprintf(stderr, "err: no number\n");
+		exit(1);
+	}
+	EpollClient *pCEpollClient = new EpollClient(atoi(argv[1]),"127.0.0.1",8021);
 	if (NULL == pCEpollClient){
 		cout<<"[epollclient error]:main init"<<"Init EpollClient fail"<<endl;
 	}
