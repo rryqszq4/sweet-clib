@@ -92,7 +92,7 @@ void EpollServer::Run(){
 					struct epoll_event ev;
 					ev.events = EPOLLOUT | EPOLLERR | EPOLLHUP;
 					ev.data.fd = client_socket; // 记录socket句柄
-					epoll_ctl(m_isock,EPOLL_CTL_MOD, client_socket, &ev);
+					epoll_ctl(m_iEpollFd,EPOLL_CTL_MOD, client_socket, &ev);
 				}
 			}else if(events[i].events & EPOLLOUT) { // 监听到写事件，发送数据
 				char sendbuff[1024];
