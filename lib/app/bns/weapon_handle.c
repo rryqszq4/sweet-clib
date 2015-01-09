@@ -5,32 +5,13 @@
 #define LINE_BUF 8192*2
 #define TITLE_BUF 8192
 
-char *my_csv_2(char *s1, char *s2[],int m){
-	char **p;
-	p = s2;
-	char *enter = "\n";
-
-	while (*s1 != *enter && !isspace(*s1)){
-		*p[m] = *s1;
-		//printf("123\n");
-		p++;
-		s1++;
-	}
-
-	if (*s1 != *enter && isspace(*s1)){
-		s1++;
-	}
-
-	return s1;
-
-}
-
 char *my_csv(char *s1, char *s2){
 	char *p;
 	p = s2;
 	char *enter = "\n";
-	
-	while (*s1 != *enter && !isspace(*s1)  ){
+	char *space = " ";
+
+	while (*s1 != *enter && (*s1 == *space ||  !isspace(*s1))  ){
 		*p = *s1;
 		p++;
 		s1++;
@@ -63,6 +44,7 @@ int main(int argc, char *argv[])
 	char **tp;
 	int n,i;
 	char *enter = "\n";
+	int block = 0;
 
 	if (argc != 2){
 		fprintf(stderr,"error: no file!\n");
@@ -84,6 +66,7 @@ int main(int argc, char *argv[])
 		sprintf(ss1, "%s", strline);
 		
 		n = 0;
+		block = 0;
 
 		if (line_num == 1){
 			while(*ss1 != *enter){
@@ -99,7 +82,57 @@ int main(int argc, char *argv[])
 			while (*ss1 != *enter){
 				memset(tmp_title, 0 ,sizeof(char)*(TITLE_BUF+1));
 				sprintf(ss1, "%s", my_csv(ss1,tmp_title));
-				printf("#%d %s: %s\n",n,title[n],tmp_title);
+				if (n == 0 && strcmp(tmp_title,"2607623") == 0){
+					block = 1;
+				}
+				if (block){
+					if (n == 0)
+						printf("ID:%s\n",tmp_title);
+					if (!strcmp(title[n],"name2"))
+						printf("名称:%s\n",tmp_title);
+					if (!strcmp(title[n],"item_grade"))
+						printf("品级:%s\n",tmp_title);
+					if (!strcmp(title[n],"game_category_3")){
+						if (!strcmp(tmp_title,"sword(1)"))
+							printf("武器类型:2,剑\n");
+						if (!strcmp(tmp_title,"gauntlet(2)"))
+							printf("武器类型:3,拳套\n");
+						if (!strcmp(tmp_title,"axe(3)"))
+							printf("武器类型:7,斧头\n");
+						if (!strcmp(tmp_title,"staff(4)"))
+							printf("武器类型:9,法杖\n");
+						if (!strcmp(tmp_title,"aura-bangle(5)"))
+							printf("武器类型:4,彩绫\n");
+						if (!strcmp(tmp_title,"dagger(6)"))
+							printf("武器类型:10,短刀\n");
+					}
+					if (n == 91)
+						printf("命中:%s\n",tmp_title);
+					if (n == 95)
+						printf("穿刺:%s\n",tmp_title);
+					if (n == 99)
+						printf("暴击:%s\n",tmp_title);
+					if (n == 103)
+						printf("暴击防御:%s\n",tmp_title);
+					if (n == 106)
+						printf("闪避:%s\n",tmp_title);
+					if (n == 109)
+						printf("格挡:%s\n",tmp_title);
+					if (n == 124)
+						printf("最大生命:%s\n",tmp_title);
+					if (n == 268)
+						printf("攻击效果:%s\n",tmp_title);
+					if (n == 25)
+						printf("需要等级:%s\n",tmp_title);
+					if (n == 28)
+						printf("职业:\n");
+					if (n == 13)
+						printf("不可交易:%s\n",tmp_title);
+					if (n == 4)
+						printf("售价:%s\n",tmp_title);
+
+					//printf("#%d %s: %s\n",n,title[n],tmp_title);
+				}
 				n++;
 			}
 		}
@@ -107,9 +140,9 @@ int main(int argc, char *argv[])
 
 		free(ss1);
 		line_num++;
-		if (line_num > 2){
+		/*if (line_num > 2){
 			break;
-		}
+		}*/
 	}
 	
 	for (i = 0; i < 300; i++){
