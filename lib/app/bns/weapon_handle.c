@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define LINE_BUF 8192
-#define TITLE_BUF 1024
+#define LINE_BUF 8192*2
+#define TITLE_BUF 8192
 
 char *my_csv_2(char *s1, char *s2[],int m){
 	char **p;
@@ -90,26 +90,30 @@ int main(int argc, char *argv[])
 				memset(tmp_title,0,sizeof(char)*(TITLE_BUF+1));
 				sprintf(ss1, "%s", my_csv(ss1,tmp_title));
 				
-				title[n] = (char*)malloc(sizeof(strlen(tmp_title))); // 动态分配数组指针
+				title[n] = (char*)malloc(sizeof(char)*strlen(tmp_title)); // 动态分配数组指针
 				//title[n] = tmp_title;	// 拷贝指针地址
 				strcpy(title[n],tmp_title); // 拷贝指针中的具体内容 
-				//printf("title: %p\n",tmp_title);
-				//printf("title: %p:\n",title[n]);
 				n++;
-				//if (n > 300)
-				//	break;
 			}
-			for (i = 0; i< 300; i++){
-				printf("#%d %s\n",i,title[i]);
-				free(title[i]);
+		}else {
+			while (*ss1 != *enter){
+				memset(tmp_title, 0 ,sizeof(char)*(TITLE_BUF+1));
+				sprintf(ss1, "%s", my_csv(ss1,tmp_title));
+				printf("#%d %s: %s\n",n,title[n],tmp_title);
+				n++;
 			}
 		}
-		
+
+
 		free(ss1);
 		line_num++;
-		if (line_num > 1){
+		if (line_num > 2){
 			break;
 		}
+	}
+	
+	for (i = 0; i < 300; i++){
+		free(title[i]);
 	}
 
 	fclose(fp);
