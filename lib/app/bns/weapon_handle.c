@@ -82,17 +82,19 @@ int main(int argc, char *argv[])
 			while (*ss1 != *enter){
 				memset(tmp_title, 0 ,sizeof(char)*(TITLE_BUF+1));
 				sprintf(ss1, "%s", my_csv(ss1,tmp_title));
-				if (n == 0 && strcmp(tmp_title,"2607623") == 0){
+				if (n == 0 && (atoi(tmp_title) >= 2607701 && atoi(tmp_title) <= 2607742 ) ){
 					block = 1;
 				}
 				if (block){
-					if (n == 0)
+					if (n == 0){
 						printf("ID:%s\n",tmp_title);
-					if (!strcmp(title[n],"name2"))
+						printf("weapons:[\"%s\"]\n",tmp_title);
+					}
+					if (n == 230)
 						printf("名称:%s\n",tmp_title);
-					if (!strcmp(title[n],"item_grade"))
+					if (n == 35)
 						printf("品级:%s\n",tmp_title);
-					if (!strcmp(title[n],"game_category_3")){
+					if (n == 8){
 						if (!strcmp(tmp_title,"sword(1)"))
 							printf("武器类型:2,剑\n");
 						if (!strcmp(tmp_title,"gauntlet(2)"))
@@ -124,12 +126,29 @@ int main(int argc, char *argv[])
 						printf("攻击效果:%s\n",tmp_title);
 					if (n == 25)
 						printf("需要等级:%s\n",tmp_title);
-					if (n == 28)
-						printf("职业:\n");
-					if (n == 13)
+					if (n == 28){
+						if (!strcmp(tmp_title,"1"))
+							printf("职业:[\"剑师\"]\n");
+						if (!strcmp(tmp_title,"2"))
+							printf("职业:[\"拳师\"]\n");
+						if (!strcmp(tmp_title,"3"))
+							printf("职业:[\"气功师\"]\n");
+						if (!strcmp(tmp_title,"5"))
+							printf("职业:[\"力士\"]\n");
+						if (!strcmp(tmp_title,"6"))
+							printf("职业:[\"召唤师\"]\n");
+						if (!strcmp(tmp_title,"7"))
+							printf("职业:[\"刺客\"]\n");
+						if (!strcmp(tmp_title,"8"))
+							printf("职业:[\"灵剑士\"]\n");
+					}if (n == 13)
 						printf("不可交易:%s\n",tmp_title);
 					if (n == 4)
 						printf("售价:%s\n",tmp_title);
+					if (n == 24)
+						printf("gear_score:%s\n",tmp_title);
+					if (n == 233)
+						printf("icon:%s\n",tmp_title);
 
 					//printf("#%d %s: %s\n",n,title[n],tmp_title);
 				}
