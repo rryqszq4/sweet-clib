@@ -1,3 +1,9 @@
+/**
+ *
+ * gcc -o hash_table_str hash_table_str.c ../../_structs/list.c ../../_structs/chtbl.c -I../../_structs
+ *
+ **/ 
+
 #include <stdio.h>
 #include <string.h>
 #include "chtbl.h"
