@@ -24,6 +24,14 @@ typedef struct List_ {
 } List;
 
 /**
+  * sweet list key value
+  **/
+typedef struct SweetListKv_ {
+	char *key;
+	char *value;
+} SweetListKv;
+
+/**
  *
  * public Interface
  *
