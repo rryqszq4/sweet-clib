@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "bns_regex.h"
+
 #define LINE_BUF 8192*2
 #define TITLE_BUF 8192
 
@@ -45,6 +47,8 @@ int main(int argc, char *argv[])
 	int n,i;
 	char *enter = "\n";
 	int block = 0;
+
+	char *regex_patten = "<[0-9a-zA-Z]+\\s[0-9a-zA-Z_=\"\\.]+>(.*)</font>";
 
 	if (argc != 2){
 		fprintf(stderr,"error: no file!\n");
@@ -123,7 +127,7 @@ int main(int argc, char *argv[])
 					if (n == 124)
 						printf("最大生命:%s\n",tmp_title);
 					if (n == 268)
-						printf("攻击效果:%s\n",tmp_title);
+						printf("攻击效果:%s\n",filter_regex(regex_patten,tmp_title));
 					if (n == 25)
 						printf("需要等级:%s\n",tmp_title);
 					if (n == 28){
