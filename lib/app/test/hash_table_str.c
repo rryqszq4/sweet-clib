@@ -84,11 +84,18 @@ int main(int argc, char **argv)
 
 	print_table(&htbl);
 
-	if (chtbl_remove_kv(&htbl, &data) != 0)
-		return 1;
-	
-	print_table(&htbl);
+	//if (chtbl_remove_kv(&htbl, &data) != 0)
+	//	return 1;
+	//print_table(&htbl);
 
+	if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL)
+		return 1;
+	data->key = "123";
+
+	data = chtbl_find_kv(&htbl, &data);
+	printf("%s",data->value);
+
+	free(data);
 	chtbl_destroy(&htbl);
 
 	return 0;
