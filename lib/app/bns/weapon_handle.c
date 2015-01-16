@@ -115,18 +115,18 @@ int create_icon_hash(CHTbl *htbl){
 
 		n = 0;
 		while(*ss2 != *enter){
-			memset(tmp, 0, sizeof(char)*(1024+1));
+			memset(tmp, '\0', sizeof(char)*(1024+1));
 			sprintf(ss2, "%s", my_csv(ss2, tmp));
 			switch (n) {
 				case 0:
 					//printf("%s, ",tmp);
-					data->key = (char *)malloc(sizeof(char)*strlen(tmp));
+					data->key = (char *)malloc(sizeof(char)*(strlen(tmp)+1));
 					strcpy(data->key,tmp);
 					//sprintf(data->key,"%s",tmp);
 					break;
 				case 2:
 					//printf("%s ", tmp);
-					data->value = (char *)malloc(sizeof(char)*strlen(tmp));
+					data->value = (char *)malloc(sizeof(char)*(strlen(tmp)+1));
 					strcpy(data->value, tmp);
 					break;
 				default:
@@ -184,21 +184,20 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	/*// init
+	// init
 	create_icon_hash(&htbl);
 
 	//print_table(&htbl);
 
-	if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL)
+	/*if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL)
 		return 1;
 	data->key = "8583";
 	data = chtbl_find_kv(&htbl, &data);
 	printf("%s\n",data->value);
 
-	free(data);
+	free(data);*/
 	// free hash table
-	remove_icon_hash(&htbl);
-	*/
+	//remove_icon_hash(&htbl);
 
 	line_num = 1;
 	while (!feof(fp)){
@@ -217,9 +216,10 @@ int main(int argc, char *argv[])
 				memset(tmp_title,0,sizeof(char)*(TITLE_BUF+1));
 				sprintf(ss1, "%s", my_csv(ss1,tmp_title));
 				
-				title[n] = (char*)malloc(sizeof(char)*strlen(tmp_title)); // 动态分配数组指针
+				title[n] = (char*)malloc(sizeof(char)*(strlen(tmp_title)+1)); // 动态分配数组指针
 				//title[n] = tmp_title;	// 拷贝指针地址
 				strcpy(title[n],tmp_title); // 拷贝指针中的具体内容 
+				//printf("%s\n",title[n]);
 				n++;
 			}
 		}else {
@@ -308,7 +308,15 @@ int main(int argc, char *argv[])
 							printf("gear_score:%s\n",tmp_title);
 							break;
 						case 233:
-							printf("icon:%s\n",filter_regex(regex_icon,tmp_title));
+							if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
+								return 1;
+							}
+							data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_icon,tmp_title))+1));
+							strcpy(data->key, filter_regex(regex_icon,tmp_title));
+							
+							printf("icon:%s,%s,%s\n",filter_regex(regex_icon,tmp_title),data->key,chtbl_find_kv(&htbl, &data)->value);
+							free(data);
+
 							break;
 						default:
 							break;
@@ -330,6 +338,9 @@ int main(int argc, char *argv[])
 	for (i = 0; i < 300; i++){
 		free(title[i]);
 	}
+
+	// free hash table
+	remove_icon_hash(&htbl);
 
 	fclose(fp);
 	return(0);

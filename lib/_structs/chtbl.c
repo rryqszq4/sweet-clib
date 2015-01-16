@@ -203,8 +203,7 @@ SweetListKv
 
 	for (element = list_head(&htbl->table[bucket]); element != NULL; element = list_next(element)){
 		if (htbl->match(*data, list_data(element))){
-			*data = list_data(element);
-			return *data;
+			return list_data(element);
 		}
 
 	}
