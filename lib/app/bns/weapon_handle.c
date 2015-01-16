@@ -1,3 +1,10 @@
+/**
+  *
+  * bns武器整理程序
+  * gcc -o weapon_handle weapon_handle.c bns_regex.c chtbl.c list.c
+  *
+  **/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -314,7 +321,8 @@ int main(int argc, char *argv[])
 							data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_icon,tmp_title))+1));
 							strcpy(data->key, filter_regex(regex_icon,tmp_title));
 							
-							printf("icon:%s,%s,%s\n",filter_regex(regex_icon,tmp_title),data->key,chtbl_find_kv(&htbl, &data)->value);
+							//printf("icon:%s,%s,%s\n",filter_regex(regex_icon,tmp_title),data->key,chtbl_find_kv(&htbl, &data)->value);
+							printf("icon:%s\n",chtbl_find_kv(&htbl, &data)->value);
 							free(data);
 
 							break;
