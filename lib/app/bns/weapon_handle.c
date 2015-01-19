@@ -241,87 +241,90 @@ int main(int argc, char *argv[])
 				if (block){
 					switch (n){
 						case 0:
-							printf("_id:%s\n",tmp_title);
-							printf("weapons:[\"%s\"]\n",tmp_title);
+							printf("{\"_id\":\"%s\",",tmp_title);
+							printf("\"weapons\":[\"%s\"],",tmp_title);
+							break;
+						case 1:
+							printf("\"level\":%s,",tmp_title);
 							break;
 						case 230:
-							printf("名称:%s\n",tmp_title);
+							printf("\"名称\":\"%s\",",tmp_title);
 							break;
 						case 35:
 							if (!strcmp(tmp_title,"7")){
-								printf("item_grade:6\n");
+								printf("\"item_grade\":\"6\",");
 							}else{
-								printf("品级:%s\n",tmp_title);
+								printf("\"item_grade\":\"%s\",",tmp_title);
 							}
 							break;
 						case 8:
 							if (!strcmp(tmp_title,"sword(1)"))
-								printf("武器类型:2\n"); //剑
+								printf("\"武器类型\":\"2\","); //剑
 							else if (!strcmp(tmp_title,"gauntlet(2)"))
-								printf("武器类型:3\n"); //拳套
+								printf("\"武器类型\":\"3\","); //拳套
 							else if (!strcmp(tmp_title,"axe(3)"))
-								printf("武器类型:7\n"); //斧头
+								printf("\"武器类型\":\"7\","); //斧头
 							else if (!strcmp(tmp_title,"staff(4)"))
-								printf("武器类型:9\n"); //法杖
+								printf("\"武器类型\":\"9\","); //法杖
 							else if (!strcmp(tmp_title,"aura-bangle(5)"))
-								printf("武器类型:4\n"); //彩绫
+								printf("\"武器类型\":\"4\","); //彩绫
 							else if (!strcmp(tmp_title,"dagger(6)"))
-								printf("武器类型:10\n"); //短刀
+								printf("\"武器类型\":\"10\","); //短刀
 							break;
 						case 91:
-							printf("命中:%s\n",tmp_title);
+							printf("\"命中\":%s,",tmp_title);
 							break;
 						case 95:
-							printf("穿刺:%s\n",tmp_title);
+							printf("\"穿刺\":%s,",tmp_title);
 							break;
 						case 99:
-							printf("暴击:%s\n",tmp_title);
+							printf("\"暴击\":%s,",tmp_title);
 							break;
 						case 103:
-							printf("暴击防御:%s\n",tmp_title);
+							printf("\"暴击防御\":%s,",tmp_title);
 							break;
 						case 106:
-							printf("闪避:%s\n",tmp_title);
+							printf("\"闪避\":%s,",tmp_title);
 							break;
 						case 109:
-							printf("格挡:%s\n",tmp_title);
+							printf("\"格挡\":%s,",tmp_title);
 							break;
 						case 124:
-							printf("最大生命:%s\n",tmp_title);
+							printf("\"最大生命\":%s,",tmp_title);
 							break;
 						case 268:
-							printf("以下效果随机出现一种:[%s]\n",filter_regex(regex_patten,tmp_title));
+							printf("\"以下效果随机出现一种\":[\"%s\"]}\n",filter_regex(regex_patten,tmp_title));
 							break;
 						case 25:
-							printf("需要等级:%s\n",tmp_title);
+							printf("\"需要等级\":%s,",tmp_title);
 							break;
 						case 28:
 							if (!strcmp(tmp_title,"1"))
-								printf("职业:[\"剑师\"]\n");
+								printf("\"职业\":[\"剑师\"],");
 							else if (!strcmp(tmp_title,"2"))
-								printf("职业:[\"拳师\"]\n");
+								printf("\"职业\":[\"拳师\"],");
 							else if (!strcmp(tmp_title,"3"))
-								printf("职业:[\"气功师\"]\n");
+								printf("\"职业\":[\"气功师\"],");
 							else if (!strcmp(tmp_title,"5"))
-								printf("职业:[\"力士\"]\n");
+								printf("\"职业\":[\"力士\"],");
 							else if (!strcmp(tmp_title,"6"))
-								printf("职业:[\"召唤师\"]\n");
+								printf("\"职业\":[\"召唤师\"],");
 							else if (!strcmp(tmp_title,"7"))
-								printf("职业:[\"刺客\"]\n");
+								printf("\"职业\":[\"刺客\"],");
 							else if (!strcmp(tmp_title,"8"))
-								printf("职业:[\"灵剑士\"]\n");
+								printf("\"职业\":[\"灵剑士\"],");
 							break;
 						case 14:
-							printf("不可交易:%s\n",tmp_title);
+							printf("\"不可交易\":\"%s\",",tmp_title);
 							if (!strcmp(tmp_title,"y")){
-								printf("归属:2\n");
+								printf("\"归属\":\"2\",");
 							}
 							break;
 						case 4:
-							printf("售价:%s\n",tmp_title);
+							printf("\"售价\":%s,",tmp_title);
 							break;
 						case 24:
-							printf("gear_score:%s\n",tmp_title);
+							printf("\"gear_score\":%s,",tmp_title);
 							break;
 						case 233:
 							if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
@@ -331,19 +334,19 @@ int main(int argc, char *argv[])
 							strcpy(data->key, filter_regex(regex_icon,tmp_title));
 							
 							//printf("icon:%s,%s,%s\n",filter_regex(regex_icon,tmp_title),data->key,chtbl_find_kv(&htbl, &data)->value);
-							printf("icon:%s\n",chtbl_find_kv(&htbl, &data)->value);
+							printf("\"icon\":\"%s\",",chtbl_find_kv(&htbl, &data)->value);
 							free(data);
 
 							break;
 						case 36:
-							printf("耐久度:100/100\n");
-							printf("disable:0\n");
-							printf("growth_level_exp:0\n");
-							printf("growth_recipe_cost:0\n");
-							printf("mesh_id:0\n");
-							printf("hidden:0\n");
-							printf("集中:0\n");
-							printf("额外伤害:0\n");
+							printf("\"耐久度\":\"100/100\",");
+							printf("\"disable\":0,");
+							printf("\"growth_level_exp\":\"0\",");
+							printf("\"growth_recipe_cost\":0,");
+							printf("\"mesh_id\":0,");
+							printf("\"hidden\":0,");
+							printf("\"集中\":0,");
+							printf("\"额外伤害\":0,");
 							break;
 						case 82:
 							atk_min = (char *)malloc(sizeof(char)*(strlen(tmp_title)+1));
@@ -351,18 +354,18 @@ int main(int argc, char *argv[])
 							//printf("攻击力最小:%s\n",atk_min);
 							break;
 						case 83:
-							printf("攻击力范围:[%d]\n",(atoi(atk_min) + atoi(tmp_title))/2);
+							printf("\"攻击力范围\":[%d],",(atoi(atk_min) + atoi(tmp_title))/2);
 							free(atk_min);
 							break;
 						case 86:
-							printf("防御:%s\n",tmp_title);
+							printf("\"防御\":%s,",tmp_title);
 							break;
 						case 261:
-							printf("描述:%s\n",tmp_title);
+							printf("\"描述\":\"%s\",",tmp_title);
 							break;
 						case 176:
-							printf("恢复:%s\n",tmp_title);
-							printf("战斗中恢复:%s\n",tmp_title);
+							printf("\"恢复\":%s,",tmp_title);
+							printf("\"战斗中恢复\":%s,",tmp_title);
 							break;
 						default:
 							break;
