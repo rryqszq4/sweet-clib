@@ -13,7 +13,7 @@
 #include <pthread.h>
 
 #define MAX_EVENT_NUMBER 1024
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 10
 
 typedef enum{false=0,true=1} bool;
 
@@ -31,6 +31,7 @@ void addfd(int epollfd, int fd, bool enable_et)
 {
 	struct epoll_event	event;
 	event.data.fd = fd;
+	event.events = EPOLLIN;
 	if (enable_et){
 		event.events |= EPOLLET;
 	}
@@ -141,8 +142,8 @@ int main (int argc, char* argv[])
 			printf("epoll failure\n");
 			break;
 		}
-		//lt(events, ret, epollfd, listenfd);
-		et(events, ret, epollfd, listenfd);
+		lt(events, ret, epollfd, listenfd);
+		//et(events, ret, epollfd, listenfd);
 	}
 	close(listenfd);
 	return 0;
