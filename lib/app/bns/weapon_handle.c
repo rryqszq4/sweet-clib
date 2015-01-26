@@ -100,7 +100,7 @@ int create_icon_hash(CHTbl *htbl){
 	int n,line_num;
 	SweetListKv *data;
 
-	if ((fpi = fopen("input/utf8_icontexture_79.txt","r")) == NULL){
+	if ((fpi = fopen("input/icontexture_81.txt","r")) == NULL){
 		fprintf(stderr, "error: no input/utf8_icontexture_79.txt file!\n");
 		return 1;
 	}
@@ -182,6 +182,8 @@ int main(int argc, char *argv[])
 	CHTbl 		htbl;
 	SweetListKv *data;
 
+	int tmp_id;
+
 	if (argc != 2){
 		fprintf(stderr,"error: no file!\n");
 		exit(1);
@@ -232,25 +234,36 @@ int main(int argc, char *argv[])
 			}
 		}else {
 			atk_min = 0;
+			tmp_id = 0;
 			while (*ss1 != *enter){
 				memset(tmp_title, 0 ,sizeof(char)*(TITLE_BUF+1));
 				sprintf(ss1, "%s", my_csv(ss1,tmp_title));
-				if (n == 0 && (atoi(tmp_title) >= 2607701 && atoi(tmp_title) <= 2607742 ) ){
+				if (n == 0 && (atoi(tmp_title) >= 2607701 && atoi(tmp_title) <= 2607742 )){
+				//if (n == 0 && (atoi(tmp_title) >= 623934 && atoi(tmp_title) <= 624058 )){
+				//if (n == 0 && (atoi(tmp_title) >= 2607750 && atoi(tmp_title) <= 2607877 )){
 					block = 1;
 				}
 				if (block){
 					switch (n){
 						case 0:
-							printf("{\"_id\":\"%s\",",tmp_title);
-							printf("\"weapons\":[\"%s\"],",tmp_title);
+							tmp_id = atoi(tmp_title);
+							//printf("{\"_id\":\"%s\",",tmp_title);
+							//printf("\"weapons\":[\"%s\"],",tmp_title);
 							break;
 						case 1:
+							if (atoi(tmp_title) > 1){
+								printf("{\"_id\":\"%d_%s\",", tmp_id, tmp_title);
+								printf("\"weapons\":[\"%d\"],",tmp_id);
+							}else {
+								printf("{\"_id\":\"%d\",",tmp_id);
+								printf("\"weapons\":[\"%d\"],",tmp_id);
+							}
 							printf("\"level\":%s,",tmp_title);
 							break;
-						case 230:
-							printf("\"名称\":\"%s\",",tmp_title);
+						case 229:
+							printf("\"name\":\"%s\",",tmp_title);
 							break;
-						case 35:
+						case 34:
 							if (!strcmp(tmp_title,"7")){
 								printf("\"item_grade\":\"6\",");
 							}else{
@@ -271,48 +284,60 @@ int main(int argc, char *argv[])
 							else if (!strcmp(tmp_title,"dagger(6)"))
 								printf("\"武器类型\":\"10\","); //短刀
 							break;
-						case 91:
+						case 90:
 							printf("\"命中\":%s,",tmp_title);
 							break;
-						case 95:
+						case 94:
 							printf("\"穿刺\":%s,",tmp_title);
 							break;
-						case 99:
+						case 98:
 							printf("\"暴击\":%s,",tmp_title);
 							break;
-						case 103:
+						case 102:
 							printf("\"暴击防御\":%s,",tmp_title);
 							break;
-						case 106:
+						case 105:
 							printf("\"闪避\":%s,",tmp_title);
 							break;
-						case 109:
+						case 108:
 							printf("\"格挡\":%s,",tmp_title);
 							break;
-						case 124:
+						case 123:
 							printf("\"最大生命\":%s,",tmp_title);
 							break;
-						case 268:
-							printf("\"以下效果随机出现一种\":[\"%s\"]}\n",filter_regex(regex_patten,tmp_title));
+						case 267:
+							if (filter_regex(regex_patten,tmp_title) != NULL){
+								printf("\"以下效果随机出现一种\":[\"%s\"]}\n",filter_regex(regex_patten,tmp_title));
+							}else {
+								printf("\"以下效果随机出现一种\":[\"\"]}\n");
+							}
 							break;
 						case 25:
 							printf("\"需要等级\":%s,",tmp_title);
 							break;
 						case 28:
-							if (!strcmp(tmp_title,"1"))
+							if (!strcmp(tmp_title,"0,0"))
+								printf("\"职业\":[\"\"],");
+							else if (!strcmp(tmp_title,"1,0"))
 								printf("\"职业\":[\"剑师\"],");
-							else if (!strcmp(tmp_title,"2"))
+							else if (!strcmp(tmp_title,"1,8"))
+								printf("\"职业\":[\"剑师\",\"灵剑士\"],");
+							else if (!strcmp(tmp_title,"2,0"))
 								printf("\"职业\":[\"拳师\"],");
-							else if (!strcmp(tmp_title,"3"))
+							else if (!strcmp(tmp_title,"3,0"))
 								printf("\"职业\":[\"气功师\"],");
-							else if (!strcmp(tmp_title,"5"))
+							else if (!strcmp(tmp_title,"5,0"))
 								printf("\"职业\":[\"力士\"],");
-							else if (!strcmp(tmp_title,"6"))
+							else if (!strcmp(tmp_title,"6,0"))
 								printf("\"职业\":[\"召唤师\"],");
-							else if (!strcmp(tmp_title,"7"))
+							else if (!strcmp(tmp_title,"7,0"))
 								printf("\"职业\":[\"刺客\"],");
-							else if (!strcmp(tmp_title,"8"))
+							else if (!strcmp(tmp_title,"7,9"))
+								printf("\"职业\":[\"刺客\",\"咒术师\"],");
+							else if (!strcmp(tmp_title,"8,0"))
 								printf("\"职业\":[\"灵剑士\"],");
+							else if (!strcmp(tmp_title,"9,0"))
+								printf("\"职业\":[\"咒术师\"],");
 							break;
 						case 14:
 							printf("\"不可交易\":\"%s\",",tmp_title);
@@ -326,7 +351,7 @@ int main(int argc, char *argv[])
 						case 24:
 							printf("\"gear_score\":%s,",tmp_title);
 							break;
-						case 233:
+						case 232:
 							if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
 								return 1;
 							}
@@ -338,7 +363,7 @@ int main(int argc, char *argv[])
 							free(data);
 
 							break;
-						case 36:
+						case 35:
 							printf("\"耐久度\":\"100/100\",");
 							printf("\"disable\":0,");
 							printf("\"growth_level_exp\":\"0\",");
@@ -348,22 +373,26 @@ int main(int argc, char *argv[])
 							printf("\"集中\":0,");
 							printf("\"额外伤害\":0,");
 							break;
-						case 82:
+						case 81:
 							atk_min = (char *)malloc(sizeof(char)*(strlen(tmp_title)+1));
 							strcpy(atk_min, tmp_title);
 							//printf("攻击力最小:%s\n",atk_min);
 							break;
-						case 83:
+						case 82:
 							printf("\"攻击力范围\":[%d],",(atoi(atk_min) + atoi(tmp_title))/2);
 							free(atk_min);
 							break;
-						case 86:
+						case 85:
 							printf("\"防御\":%s,",tmp_title);
 							break;
-						case 261:
-							printf("\"描述\":\"%s\",",tmp_title);
+						case 260:
+							if (filter_regex(regex_patten,tmp_title) != NULL){
+								printf("\"描述\":\"%s\",",filter_regex(regex_patten,tmp_title));
+							}else {
+								printf("\"描述\":\"\",");
+							}
 							break;
-						case 176:
+						case 175:
 							printf("\"恢复\":%s,",tmp_title);
 							printf("\"战斗中恢复\":%s,",tmp_title);
 							break;
