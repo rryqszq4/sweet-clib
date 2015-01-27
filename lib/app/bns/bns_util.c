@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-char *__strntok;
+#include "bns_util.h"
 
 char* strntok(char *s1, char *s2, int n)
 {
@@ -59,17 +55,4 @@ char* strntok(char *s1, char *s2, int n)
 	//printf("res: %s\n",res);
 	__strntok = NULL;
 	return res;
-}
-
-int main(int artc, char *argv[])
-{
-	char str[] = "asdfasdf<image>3abcasdfasdf<br/>abc<br/>123";
-	
-	char *ptr;
-	ptr = strntok(str, "<br/>", 5);
-	while(ptr != NULL){
-		printf("%s\n", ptr);
-		//printf("%s\n", __strntok);
-		ptr = strntok(__strntok, "<br/>", 5);	
-	}
 }

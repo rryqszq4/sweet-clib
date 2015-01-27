@@ -1,7 +1,7 @@
 /**
   *
   * bns武器整理程序
-  * gcc -o weapon_handle weapon_handle.c bns_regex.c chtbl.c list.c
+  * gcc -o weapon_handle weapon_handle.c bns_regex.c chtbl.c list.c bns_util.c
   *
   **/
 
@@ -12,6 +12,7 @@
 #include "bns_regex.h"
 #include "chtbl.h"
 #include "list.h"
+#include "bns_util.h"
 
 #define LINE_BUF 8192*2
 #define TITLE_BUF 8192
@@ -183,6 +184,7 @@ int main(int argc, char *argv[])
 	SweetListKv *data;
 
 	int tmp_id;
+	char *ptr1;
 
 	if (argc != 2){
 		fprintf(stderr,"error: no file!\n");
@@ -395,6 +397,14 @@ int main(int argc, char *argv[])
 						case 175:
 							printf("\"恢复\":%s,",tmp_title);
 							printf("\"战斗中恢复\":%s,",tmp_title);
+							break;
+						case 266:
+							ptr1 = strntok(tmp_title, "<br/>", 5);
+							while(ptr1 != NULL){
+								printf("%s\n", ptr1);
+								//printf("%s\n", __strntok);
+								ptr1 = strntok(__strntok, "<br/>", 5);	
+							}
 							break;
 						default:
 							break;
