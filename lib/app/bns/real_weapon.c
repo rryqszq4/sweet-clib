@@ -1,7 +1,7 @@
 /**
   *
   * bns 获取真实武器数据
-  * gcc -o real_weapon real_weapon.c bns_regex.c chtbl.c list.c bns_hash.c
+  * gcc -o real_weapon real_weapon.c bns_regex.c chtbl.c list.c bns_hash.c bns_util.c
   *
   **/
 
@@ -13,6 +13,7 @@
 #include "chtbl.h"
 #include "list.h"
 #include "bns_hash.h"
+#include "bns_util.h"
 
 #define LINE_BUF 8192*2
 #define TITLE_BUF 8192
@@ -60,13 +61,20 @@ int main(int argc, char *argv[])
 	int block = 0;
 	char *atk_min;
 
-	char *regex_patten = "<[0-9a-zA-Z]+\\s[0-9a-zA-Z_=\"\\.]+>(.*)</font>";
+	char *regex_patten = "<[0-9a-zA-Z]+\\s[0-9a-zA-Z_=\"\\.]+>(.*)</font";
 	char *regex_icon = "([0-9]+),[0-9]+,[0-9]+";
+	char *regex_loc_k = "path=\"\"[0-9\\.]+([a-zA-Z_]+)\"\"";
+	char *regex_loc_v = "<image.*/>(.*)\"{0,1}";
+
 
 	CHTbl 		htbl;
 	SweetListKv *data;
 
 	int tmp_id;
+	char *ptr1;
+	int loc_i = 0;
+	char *ptr2;
+	int loc_2 = 0;
 
 	if (argc < 2){
 		fprintf(stderr,"error: no file!\n");
@@ -202,11 +210,26 @@ int main(int argc, char *argv[])
 							printf("\"最大生命\":%s,",tmp_title);
 							break;
 						case 267:
-							if (filter_regex(regex_patten,tmp_title) != NULL){
-								printf("\"攻击效果\":\"%s\"}\n",filter_regex(regex_patten,tmp_title));
+							/*if (filter_regex(regex_patten,tmp_title) != NULL){
+								printf("\"以下效果随机出现一种\":[\"%s\"]}\n",filter_regex(regex_patten,tmp_title));
 							}else {
-								printf("\"攻击效果\":\"\"}\n");
+								printf("\"以下效果随机出现一种\":[\"\"]}\n");
+							}*/
+							printf("\"以下效果随机出现一种\":[");
+							ptr2 = strntok(tmp_title,"><br/>",6);
+							loc_2 = 0;
+							while (ptr2 != NULL){
+								//printf("\n%s\n",ptr2);
+								if (loc_2 > 0){printf(",");}
+								if (filter_regex(regex_patten,tmp_title) != NULL){
+									printf("\"%s\"",filter_regex(regex_patten,ptr2));
+								}else {
+									printf("\"\"");
+								}
+								loc_2++;
+								ptr2 = strntok(__strntok,"><br/>",6);
 							}
+							printf("]}\n");
 							break;
 						case 25:
 							printf("\"需要等级\":%s,",tmp_title);
@@ -291,6 +314,24 @@ int main(int argc, char *argv[])
 						case 175:
 							printf("\"恢复\":%s,",tmp_title);
 							printf("\"战斗中恢复\":%s,",tmp_title);
+							break;
+						case 266:
+							printf("\"location\":[");
+							ptr1 = strntok(tmp_title, "<br/>", 5);
+							loc_i = 0;
+							while(ptr1 != NULL){
+								//printf("%s\n", ptr1);
+								if (filter_regex(regex_loc_k,ptr1) != NULL){
+									//printf("%s\n", ptr1);
+									if (loc_i > 0){printf(",");}
+									printf("[\"%s\",", str_tolower(filter_regex(regex_loc_k,ptr1)));
+									printf("\"%s\"]", str_delchar(filter_regex(regex_loc_v,ptr1),"\""));
+									loc_i++;
+								}
+								//printf("%s\n", __strntok);
+								ptr1 = strntok(__strntok, "<br/>", 5);	
+							}
+							printf("],");
 							break;
 						default:
 							break;
