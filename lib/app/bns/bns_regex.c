@@ -16,18 +16,18 @@ char *filter_regex(char* pattern, char* src){
 	if (err != 0){
 		regerror(err, &reg, errbuf, sizeof(errbuf));
 		fprintf(stderr, "%s: patter '%s'\n", errbuf, pattern);
-		return (char*)1;
+		return (char*)0;
 	}
 
 	err = regexec(&reg, src, nmatch, pm, 0);
 	if (err == REG_NOMATCH){
-		printf("Sorry, no match ...\n");
+		//printf("Sorry, no match ...\n");
 		regfree(&reg);
 		return (char*)0;
 	}else if (err != 0){
 		regerror(err, &reg, errbuf, sizeof(errbuf));
 		fprintf(stderr, "%s: regcom('%s')\n", errbuf, src);
-		return (char*)2;
+		return (char*)0;
 	}
 
 	for (i = 0; i <= reg.re_nsub; i++){

@@ -56,3 +56,35 @@ char* strntok(char *s1, char *s2, int n)
 	__strntok = NULL;
 	return res;
 }
+
+char* str_tolower(char* s1)
+{
+	char *p;
+	static char res[1024];
+	memset(res, 0, sizeof(res));
+	p = res;
+	while (*s1 != '\0'){
+		*p = *s1;
+		*p = tolower(*p);
+		p++;
+		s1++;
+	}
+	return res;
+}
+
+char* str_delchar(char* s1, char *s2)
+{
+	char *p;
+    static char res[1024];
+    memset(res, 0, sizeof(res));
+    p = res;
+    while (*s1 != '\0'){
+		if (*s1 == *s2){
+		}else {
+			*p = *s1;
+			p++;
+		}
+		s1++;
+    }
+    return res;
+}
