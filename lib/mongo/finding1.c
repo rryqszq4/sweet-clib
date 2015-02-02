@@ -1,6 +1,12 @@
+/*
+ *
+ * gcc -o finding1 finding1.c -I/root/source/mongo-c-driver-1.1.0/src/libbson/src/bson -I/root/source/mongo-c-driver-1.1.0/src/mongoc -lmongoc-1.0
+ *
+ */
 #include <bson.h>
 #include <mongoc.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int
 main (int argc, char *argv[])
@@ -14,8 +20,13 @@ main (int argc, char *argv[])
 
 	mongoc_init();
 
-	client = mongoc_client_new("mongodb://localhost:27017");
-	collection = mongoc_client_get_collection(client, "test", "test");
+	client = mongoc_client_new("mongodb://root:root@localhost:27017/?authSource=gamedb");
+	if (!client){
+		fprintf(stderr, "Failed to parse URI.\n");
+		return EXIT_FAILURE;
+	}
+	
+	collection = mongoc_client_get_collection(client, "gamedb", "entity_hs_card_zhcn");
 	query = bson_new();
 	cursor = mongoc_collection_find(collection, MONGOC_QUERY_NONE, 0, 0, 0, query, NULL, NULL);
 
