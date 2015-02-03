@@ -248,8 +248,8 @@ int main(int argc, char *argv[])
 				sprintf(ss1, "%s", my_csv(ss1,tmp_title));
 				//if (n == 0 && (atoi(tmp_title) >= 2607701 && atoi(tmp_title) <= 2607742 )){
 				//if (n == 0 && (atoi(tmp_title) >= 623934 && atoi(tmp_title) <= 624168 )){
-				if (n == 0 && (atoi(tmp_title) >= 2607750 && atoi(tmp_title) <= 2609499 )){
-				//if (n == 0 && (atoi(tmp_title) == 623954)){
+				//if (n == 0 && (atoi(tmp_title) >= 2607750 && atoi(tmp_title) <= 2609499 )){
+				if (n == 0 && (atoi(tmp_title) == 624040)){
 				//2609260	
 					block = 1;
 				}
@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
 							while (ptr2 != NULL){
 								//printf("\n%s\n",ptr2);
 								if (loc_2 > 0){printf(",");}
-								if (filter_regex(regex_patten,tmp_title) != NULL){
+								if (filter_regex(regex_patten,ptr2) != NULL){
 									printf("\"%s\"",filter_regex(regex_patten,ptr2));
 								}else {
 									printf("\"\"");
