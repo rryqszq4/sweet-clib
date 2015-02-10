@@ -17,10 +17,11 @@ int main(int argc, char *argv[])
 	int i;
 	for (i=0; i < 10; i++){
 		workingnum[i] = i;
-		pool_add_worker(myprocess, &workingnum[i]);
+		threadpool_add_worker(myprocess, &workingnum[i]);
 	}
+	
 	sleep(5);
-	pool_destroy();
+	threadpool_destroy();
 
 	free(workingnum);
 	return 0;

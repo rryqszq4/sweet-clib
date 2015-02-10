@@ -16,14 +16,14 @@ void threadpool_init(int max_thread_num)
 	pool->thread_ids = (pthread_t *)malloc(max_thread_num * sizeof(pthread_t));
 	int i;
 	for (i=0; i < max_thread_num; i++){
-		pthread_create(&(pool->thread_ids[i]), NULL , thread_handle, NULL);
+		pthread_create(&(pool->thread_ids[i]), NULL , threadpool_handle, NULL);
 	}
 
-	printf("%d\n",pool->cur_queue_size);
+	//printf("%d\n",pool->cur_queue_size);
 
 }
 
-int pool_add_worker(void *(*process)(void *arg), void *arg)
+int threadpool_add_worker(void *(*process)(void *arg), void *arg)
 {
 	threadworker *new_worker = (threadworker *)malloc(sizeof(threadworker));
 	new_worker->process = process;
@@ -38,7 +38,7 @@ int pool_add_worker(void *(*process)(void *arg), void *arg)
 	return 0;
 }
 
-int pool_destroy()
+int threadpool_destroy()
 {
 	if (pool->shutdown)
 		return -1;
@@ -65,12 +65,13 @@ int pool_destroy()
 	return 0;
 }
 
-void *thread_handle(void *arg)
+void *threadpool_handle(void *arg)
 {
 	printf("starting thread 0x%x  \n", pthread_self());
+	//printf("%d,%d\n",pool->cur_queue_size, pool->shutdown);
 	while (1){
 		pthread_mutex_lock(&(pool->queue_lock));
-		printf("%d,%d\n",pool->cur_queue_size, pool->shutdown);
+		//printf("%d,%d\n",pool->cur_queue_size, pool->shutdown);
 		while (pool->cur_queue_size == 0 && !pool->shutdown){
 			printf("thread 0x%x is waiting\n", pthread_self());
 			pthread_cond_wait(&(pool->queue_ready), &(pool->queue_lock));
