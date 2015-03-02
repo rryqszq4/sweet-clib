@@ -34,7 +34,7 @@ char* strntok(char *s1, char *s2, int n)
 		if (*s1 == *s2  || i>0){
 			if (i == 0){
 				s1++;s2++;
-				if (*s1 != *s2){
+				if (*s1 != *s2 && n > 1){
 					i--;s1--;s2--;
 					*pp = *s1;
 					pp++;
@@ -64,12 +64,20 @@ char* strntok(char *s1, char *s2, int n)
 int main(int artc, char *argv[])
 {
 	char str[] = "asdfasdf<image>3abcasdfasdf<br/>abc<br/>123";
-	
+	char str2[] = "1,2,3,4";
+
 	char *ptr;
+	char *ptr2;
 	ptr = strntok(str, "<br/>", 5);
 	while(ptr != NULL){
 		printf("%s\n", ptr);
 		//printf("%s\n", __strntok);
 		ptr = strntok(__strntok, "<br/>", 5);	
+	}
+
+	ptr2 = strntok(str2, ",",1);
+	while(ptr2 != NULL){
+		printf("%s\n", ptr2);
+		ptr2 = strntok(__strntok, ",",1);
 	}
 }

@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 	char *regex_icon = "([0-9]+),[0-9]+,[0-9]+";
 	char *regex_loc_k = "path=\"\"[0-9\\.]+([a-zA-Z_]+)\"\"";
 	char *regex_loc_v = "<image.*/>(.*)\"{0,1}";
+	char *regex_consum = "item:([0-9]+)";
 
 
 	CHTbl 		htbl;
@@ -68,6 +69,9 @@ int main(int argc, char *argv[])
 	int loc_i = 0;
 	char *ptr2;
 	int loc_2 = 0;
+	char *ptr3[6];
+	int loc_3 = 0;
+	int j;
 
 	if (argc < 2){
 		fprintf(stderr,"error: no file!\n");
@@ -122,7 +126,8 @@ int main(int argc, char *argv[])
 			while (*ss1 != *enter){
 				memset(tmp_title, 0 ,sizeof(char)*(TITLE_BUF+1));
 				sprintf(ss1, "%s", my_csv(ss1,tmp_title));
-				if (n == 0 && (atoi(tmp_title) >= atoi(argv[2]) && atoi(tmp_title) <= atoi(argv[3]) )){
+				//if (n == 0 && (atoi(tmp_title) >= atoi(argv[2]) && atoi(tmp_title) <= atoi(argv[3]) )){
+				
 				//if (n == 0 && (atoi(tmp_title) >= 623934 && atoi(tmp_title) <= 624058 )){
 				//if (n == 0 && (atoi(tmp_title) >= 2607750 && atoi(tmp_title) <= 2607877 )){
 					block = 1;
@@ -228,6 +233,35 @@ int main(int argc, char *argv[])
 							break;
 						case 267:
 							printf("\"description\":\"%s\",", tmp_title);
+							break;
+						case 287:
+							ptr2 = strntok(tmp_title,",1,",3);
+							loc_2 = 0;
+							while (ptr2 != NULL){
+								if (filter_regex(regex_consum,ptr2) != NULL){
+									ptr3[loc_2] = (char *)malloc(sizeof(char)*strlen((filter_regex(regex_consum,ptr2))+1));
+									strcpy(ptr3[loc_2],filter_regex(regex_consum,ptr2));
+									loc_2++;
+								}
+								ptr2 = strntok(__strntok,",1,",3);
+							}
+							break;
+						case 288:
+							printf("\"consumable\":[");
+							ptr2 = strntok(tmp_title,",",1);
+							loc_2 = 0;
+							while (ptr2 != NULL){
+								if (ptr3[loc_2] != NULL){
+									if (loc_2 > 0){
+										printf(",");
+									}
+									printf("[[\"%s\",\"grocery\"],%s]", ptr3[loc_2],ptr2);
+									free(ptr3[loc_2]);
+								}
+								loc_2++;
+								ptr2 = strntok(__strntok,",",1);
+							}
+							printf("],");
 							break;
 						case 289:
 							printf("\"money_cost\":%s", tmp_title);

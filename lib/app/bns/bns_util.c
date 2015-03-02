@@ -30,7 +30,7 @@ char* strntok(char *s1, char *s2, int n)
 		if (*s1 == *s2  || i>0){
 			if (i == 0){
 				s1++;s2++;
-				if (*s1 != *s2){
+				if (*s1 != *s2 && n > 1){
 					i--;s1--;s2--;
 					*pp = *s1;
 					pp++;
