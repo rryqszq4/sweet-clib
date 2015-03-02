@@ -75,12 +75,12 @@ int main(int argc, char *argv[])
 	}
 
 	if (argc < 3){
-		fprintf(stderr, "error: no start_weapon_id\n");
+		fprintf(stderr, "error: no start_gem_id\n");
 		exit(1);
 	}
 
 	if (argc < 4){
-		fprintf(stderr, "error: no end_weapon_id\n");
+		fprintf(stderr, "error: no end_gem_id\n");
 		exit(1);
 	}
 
@@ -89,8 +89,8 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	// init
-	//create_icon_hash(&htbl);
+	//init
+	create_icon_hash(&htbl);
 
 
 	line_num = 1;
@@ -132,6 +132,9 @@ int main(int argc, char *argv[])
 						case 0:
 							printf("{\"_id\":\"%s\",",tmp_title);
 							break;
+						case 4:
+							printf("\"price\":%s,", tmp_title);
+							break;
 						case 8:
 							if (!strcmp(tmp_title,"gam(1)7"))
 								printf("\"game_category\":\"1\","); 
@@ -151,7 +154,7 @@ int main(int argc, char *argv[])
 								printf("\"game_category\":\"8\","); 
 							break;
 						case 24:
-							printf("\"gear_score\",%s,", tmp_title);
+							printf("\"gear_score\":%s,", tmp_title);
 							break;
 						case 25:
 							printf("\"需要等级\":%s,",tmp_title);
@@ -163,11 +166,72 @@ int main(int argc, char *argv[])
 								printf("\"item_grade\":\"%s\",",tmp_title);
 							}
 							break;
+						case 90:
+							printf("\"命中\":%s,",tmp_title);
+							break;
+						case 94:
+							printf("\"穿刺\":%s,",tmp_title);
+							break;
+						case 98:
+							printf("\"暴击\":%s,",tmp_title);
+							break;
+						case 102:
+							printf("\"暴击防御\":%s,",tmp_title);
+							break;
+						case 105:
+							printf("\"闪避\":%s,",tmp_title);
+							break;
+						case 108:
+							printf("\"格挡\":%s,",tmp_title);
+							break;
+						case 123:
+							printf("\"最大生命\":%s,",tmp_title);
+							break;
+						case 134:
+							printf("\"max_value\":%s,", tmp_title);
+							break;
 						case 229:
 							printf("\"name\":\"%s\",",tmp_title);
 							break;
+						case 232:
+							if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
+								return 1;
+							}
+							data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_icon,tmp_title))+1));
+							strcpy(data->key, filter_regex(regex_icon,tmp_title));
+							
+							//printf("icon:%s,%s,%s\n",filter_regex(regex_icon,tmp_title),data->key,chtbl_find_kv(&htbl, &data)->value);
+							printf("\"icon\":\"%s\",",chtbl_find_kv(&htbl, &data)->value);
+							free(data);
+
+							break;
+						case 263:
+							printf("\"title\":\"%s\",",tmp_title);
+							break;
+						case 266:
+							printf("\"location\":[");
+							ptr1 = strntok(tmp_title, "<br/>", 5);
+							loc_i = 0;
+							while(ptr1 != NULL){
+								//printf("%s\n", ptr1);
+								if (filter_regex(regex_loc_k,ptr1) != NULL){
+									//printf("%s\n", ptr1);
+									if (loc_i > 0){printf(",");}
+									printf("[\"%s\",", str_tolower(filter_regex(regex_loc_k,ptr1)));
+									printf("\"%s\"]", str_delchar(filter_regex(regex_loc_v,ptr1),"\""));
+									loc_i++;
+								}
+								//printf("%s\n", __strntok);
+								ptr1 = strntok(__strntok, "<br/>", 5);	
+							}
+							printf("],");
+							break;
 						case 267:
 							printf("\"description\":\"%s\",", tmp_title);
+							break;
+						case 289:
+							printf("\"money_cost\":%s", tmp_title);
+							printf("}\n");
 						default:
 							break;
 					}	
@@ -190,7 +254,7 @@ int main(int argc, char *argv[])
 	}
 
 	// free hash table
-	//remove_icon_hash(&htbl);
+	remove_icon_hash(&htbl);
 
 	fclose(fp);
 	return(0);
