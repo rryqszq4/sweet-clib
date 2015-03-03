@@ -247,18 +247,21 @@ int main(int argc, char *argv[])
 							break;
 						case 288:
 							printf("\"consumable\":[");
-							ptr2 = strntok(tmp_title,",",1);
-							loc_2 = 0;
-							while (ptr2 != NULL){
-								if (ptr3[loc_2] != NULL){
-									if (loc_2 > 0){
-										printf(",");
+							if (loc_2 > 0){
+								ptr2 = strntok(tmp_title,",",1);
+								loc_2 = 0;
+								while (ptr2 != NULL){
+									if (ptr3[loc_2] != NULL){
+										if (loc_2 > 0){
+											printf(",");
+										}
+										printf("[[\"%s\",\"grocery\"],%s]", ptr3[loc_2],ptr2);
+										free(ptr3[loc_2]);
+										ptr3[loc_2] = NULL;
 									}
-									printf("[[\"%s\",\"grocery\"],%s]", ptr3[loc_2],ptr2);
-									free(ptr3[loc_2]);
+									loc_2++;
+									ptr2 = strntok(__strntok,",",1);
 								}
-								loc_2++;
-								ptr2 = strntok(__strntok,",",1);
 							}
 							printf("],");
 							break;
