@@ -126,8 +126,7 @@ int main(int argc, char *argv[])
 			while (*ss1 != *enter){
 				memset(tmp_title, 0 ,sizeof(char)*(TITLE_BUF+1));
 				sprintf(ss1, "%s", my_csv(ss1,tmp_title));
-				//if (n == 0 && (atoi(tmp_title) >= atoi(argv[2]) && atoi(tmp_title) <= atoi(argv[3]) )){
-				
+				if (n == 0 && (atoi(tmp_title) >= atoi(argv[2]) && atoi(tmp_title) <= atoi(argv[3]) )){
 				//if (n == 0 && (atoi(tmp_title) >= 623934 && atoi(tmp_title) <= 624058 )){
 				//if (n == 0 && (atoi(tmp_title) >= 2607750 && atoi(tmp_title) <= 2607877 )){
 					block = 1;
@@ -141,7 +140,7 @@ int main(int argc, char *argv[])
 							printf("\"price\":%s,", tmp_title);
 							break;
 						case 8:
-							if (!strcmp(tmp_title,"gam(1)7"))
+							if (!strcmp(tmp_title,"gam1(7)"))
 								printf("\"game_category\":\"1\","); 
 							else if (!strcmp(tmp_title,"gan2(8)"))
 								printf("\"game_category\":\"2\","); 
