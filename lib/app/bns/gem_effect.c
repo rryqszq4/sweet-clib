@@ -193,37 +193,45 @@ int main(int argc, char *argv[])
 							}
 							break;
 						case 64:
-							if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
-								return 1;
-							}
-							data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_set_item,tmp_title))+1));
-							strcpy(data->key, filter_regex(regex_set_item,tmp_title));
-							
-							if ((set_item_3_data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
-								return 1;
-							}
-							set_item_3_data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_effect,chtbl_find_kv(&set_item_3, &data)->value))+1));
-							strcpy(set_item_3_data->key, filter_regex(regex_effect,chtbl_find_kv(&set_item_3, &data)->value));
-							printf("\"count_3_effect\":\"%s\",",chtbl_find_kv(&effect_equip, &set_item_3_data)->value);
-							free(set_item_3_data);
+							if (filter_regex(regex_set_item,tmp_title) != NULL){
+								if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
+									return 1;
+								}
+								data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_set_item,tmp_title))+1));
+								strcpy(data->key, filter_regex(regex_set_item,tmp_title));
+								
+								if (filter_regex(regex_effect,chtbl_find_kv(&set_item_3, &data)->value) != NULL){
+									if ((set_item_3_data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
+										return 1;
+									}
+									set_item_3_data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_effect,chtbl_find_kv(&set_item_3, &data)->value))+1));
+									strcpy(set_item_3_data->key, filter_regex(regex_effect,chtbl_find_kv(&set_item_3, &data)->value));
+									printf("\"count_3_effect\":\"%s\",",chtbl_find_kv(&effect_equip, &set_item_3_data)->value);
+									free(set_item_3_data);
+								}
 
-							if ((set_item_5_data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
-								return 1;
-							}
-							set_item_5_data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_effect,chtbl_find_kv(&set_item_5, &data)->value))+1));
-							strcpy(set_item_5_data->key, filter_regex(regex_effect,chtbl_find_kv(&set_item_5, &data)->value));
-							printf("\"count_5_effect\":\"%s\",",chtbl_find_kv(&effect_equip, &set_item_5_data)->value);
-							free(set_item_5_data);
+								if (filter_regex(regex_effect,chtbl_find_kv(&set_item_5, &data)->value) != NULL){
+									if ((set_item_5_data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
+										return 1;
+									}
+									set_item_5_data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_effect,chtbl_find_kv(&set_item_5, &data)->value))+1));
+									strcpy(set_item_5_data->key, filter_regex(regex_effect,chtbl_find_kv(&set_item_5, &data)->value));
+									printf("\"count_5_effect\":\"%s\",",chtbl_find_kv(&effect_equip, &set_item_5_data)->value);
+									free(set_item_5_data);
+								}
 
-							if ((set_item_8_data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
-								return 1;
-							}
-							set_item_8_data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_effect,chtbl_find_kv(&set_item_8, &data)->value))+1));
-							strcpy(set_item_8_data->key, filter_regex(regex_effect,chtbl_find_kv(&set_item_8, &data)->value));
-							printf("\"count_8_effect\":\"%s\",",chtbl_find_kv(&effect_equip, &set_item_8_data)->value);
-							free(set_item_8_data);
+								if (filter_regex(regex_effect,chtbl_find_kv(&set_item_8, &data)->value) != NULL){
+									if ((set_item_8_data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
+										return 1;
+									}
+									set_item_8_data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_effect,chtbl_find_kv(&set_item_8, &data)->value))+1));
+									strcpy(set_item_8_data->key, filter_regex(regex_effect,chtbl_find_kv(&set_item_8, &data)->value));
+									printf("\"count_8_effect\":\"%s\",",chtbl_find_kv(&effect_equip, &set_item_8_data)->value);
+									free(set_item_8_data);
+								}
 
-							free(data);
+								free(data);
+							}
 							break;
 						case 90:
 							printf("\"命中\":%s,",tmp_title);
