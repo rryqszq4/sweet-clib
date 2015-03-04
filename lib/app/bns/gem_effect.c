@@ -59,6 +59,8 @@ int main(int argc, char *argv[])
 	char *regex_loc_k = "path=\"\"[0-9\\.]+([a-zA-Z_]+)\"\"";
 	char *regex_loc_v = "<image.*/>(.*)\"{0,1}";
 	char *regex_consum = "item:([0-9]+)";
+	char *regex_set_item = "set-item:([0-9]+)";
+	char *regex_effect = "effect:([0-9]+)";
 
 
 	CHTbl 		htbl;
@@ -111,10 +113,10 @@ int main(int argc, char *argv[])
 	create_setitem_hash(&set_item_5, file_set, 7);
 	create_setitem_hash(&set_item_8, file_set, 10);
 	create_setitem_hash(&effect_equip, file_effect, 87);
-	print_table(&set_item_3);
-	print_table(&set_item_5);
-	print_table(&set_item_8);
-	print_table(&effect_equip);
+	//print_table(&set_item_3);
+	//print_table(&set_item_5);
+	//print_table(&set_item_8);
+	//print_table(&effect_equip);
 
 
 	line_num = 1;
@@ -129,7 +131,7 @@ int main(int argc, char *argv[])
 		n = 0;
 		block = 0;
 
-		/*if (line_num == 1){
+		if (line_num == 1){
 			while(*ss1 != *enter){
 				memset(tmp_title,0,sizeof(char)*(TITLE_BUF+1));
 				sprintf(ss1, "%s", my_csv(ss1,tmp_title));
@@ -189,6 +191,39 @@ int main(int argc, char *argv[])
 							}else{
 								printf("\"item_grade\":\"%s\",",tmp_title);
 							}
+							break;
+						case 64:
+							if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
+								return 1;
+							}
+							data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_set_item,tmp_title))+1));
+							strcpy(data->key, filter_regex(regex_set_item,tmp_title));
+							
+							if ((set_item_3_data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
+								return 1;
+							}
+							set_item_3_data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_effect,chtbl_find_kv(&set_item_3, &data)->value))+1));
+							strcpy(set_item_3_data->key, filter_regex(regex_effect,chtbl_find_kv(&set_item_3, &data)->value));
+							printf("\"count_3_effect\":\"%s\",",chtbl_find_kv(&effect_equip, &set_item_3_data)->value);
+							free(set_item_3_data);
+
+							if ((set_item_5_data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
+								return 1;
+							}
+							set_item_5_data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_effect,chtbl_find_kv(&set_item_5, &data)->value))+1));
+							strcpy(set_item_5_data->key, filter_regex(regex_effect,chtbl_find_kv(&set_item_5, &data)->value));
+							printf("\"count_5_effect\":\"%s\",",chtbl_find_kv(&effect_equip, &set_item_5_data)->value);
+							free(set_item_5_data);
+
+							if ((set_item_8_data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL){
+								return 1;
+							}
+							set_item_8_data->key = (char *)malloc(sizeof(char)*(strlen(filter_regex(regex_effect,chtbl_find_kv(&set_item_8, &data)->value))+1));
+							strcpy(set_item_8_data->key, filter_regex(regex_effect,chtbl_find_kv(&set_item_8, &data)->value));
+							printf("\"count_8_effect\":\"%s\",",chtbl_find_kv(&effect_equip, &set_item_8_data)->value);
+							free(set_item_8_data);
+
+							free(data);
 							break;
 						case 90:
 							printf("\"命中\":%s,",tmp_title);
@@ -295,7 +330,7 @@ int main(int argc, char *argv[])
 				}
 				n++;
 			}
-		}*/
+		}
 
 
 		free(ss1);
