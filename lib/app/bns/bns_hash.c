@@ -45,7 +45,7 @@ void print_table(const CHTbl *htbl)
 	return ;
 }
 
-int create_icon_hash(CHTbl *htbl)
+int create_icon_hash(CHTbl *htbl,char *file_name)
 {
 	FILE *fpi;
 	char *ss2;

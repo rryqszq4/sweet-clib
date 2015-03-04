@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
 	char *ptr3[6];
 	int loc_3 = 0;
 	int j;
+	char *file_icon = "input/icontexture_81.txt";
 
 	if (argc < 2){
 		fprintf(stderr,"error: no file!\n");
@@ -94,7 +95,7 @@ int main(int argc, char *argv[])
 	}
 
 	//init
-	create_icon_hash(&htbl);
+	create_icon_hash(&htbl,file_icon);
 
 
 	line_num = 1;

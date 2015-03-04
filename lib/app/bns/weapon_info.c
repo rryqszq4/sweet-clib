@@ -68,6 +68,8 @@ int main(int argc, char *argv[])
 
 	int tmp_id;
 
+	char *file_icon = "input/icontexture_81.txt";
+
 	if (argc < 2){
 		fprintf(stderr,"error: no file!\n");
 		exit(1);
@@ -84,7 +86,7 @@ int main(int argc, char *argv[])
 	}
 
 	// init
-	create_icon_hash(&htbl);
+	create_icon_hash(&htbl,file_icon);
 
 	//print_table(&htbl);
 

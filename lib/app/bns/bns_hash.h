@@ -10,7 +10,7 @@
 int hashpjw(const void *key);
 int match_sweet_list_kv(const SweetListKv *data1, const SweetListKv *data2);
 void print_table(const CHTbl *htbl);
-int create_icon_hash(CHTbl *htbl);
+int create_icon_hash(CHTbl *htbl,char *file_name);
 void remove_icon_hash(CHTbl * htbl);
 
 
