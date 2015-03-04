@@ -55,7 +55,7 @@ int create_icon_hash(CHTbl *htbl,char *file_name)
 	int n,line_num;
 	SweetListKv *data;
 
-	if ((fpi = fopen("input/icontexture_81.txt","r")) == NULL){
+	if ((fpi = fopen(file_name,"r")) == NULL){
 		fprintf(stderr, "error: no input/utf8_icontexture_79.txt file!\n");
 		return 1;
 	}
@@ -84,7 +84,7 @@ int create_icon_hash(CHTbl *htbl,char *file_name)
 					//printf("%s, ",tmp);
 					data->key = (char *)malloc(sizeof(char)*(strlen(tmp)+1));
 					strcpy(data->key,tmp);
-					//sprintf(data->key,"%s",tmp);
+					//printf(data->key,"%s",tmp);
 					break;
 				case 2:
 					//printf("%s ", tmp);
@@ -112,6 +112,74 @@ int create_icon_hash(CHTbl *htbl,char *file_name)
 }
 
 void remove_icon_hash(CHTbl * htbl)
+{
+	chtbl_destroy(htbl);
+	return ;
+}
+
+int create_setitem_hash(CHTbl *htbl,char *file_name, int effect)
+{
+	FILE *fpi;
+	char *ss2;
+	char icon_line[8192+1];
+	char tmp[8192+1];
+	char *enter = "\n";
+	int n,line_num;
+	SweetListKv *data;
+
+	if ((fpi = fopen(file_name,"r")) == NULL){
+		fprintf(stderr, "error: no input/utf8_icontexture_79.txt file!\n");
+		return 1;
+	}
+
+	if (chtbl_init_kv(htbl, PRIME_TBLSIZ, hashpjw, match_sweet_list_kv, free) != 0){
+		fprintf(stderr, "error: init hash table fails!\n");
+		return 2;
+	}
+
+	line_num = 1;
+	while (!feof(fpi)){
+		memset(icon_line, 0, sizeof(icon_line));
+		fgets(icon_line, 8192, fpi);
+		ss2 = (char *)malloc(sizeof(char)*(8192+1));
+		sprintf(ss2, "%s", icon_line);
+
+		if ((data = (SweetListKv *)malloc(sizeof(SweetListKv))) == NULL)
+			return 1;
+
+		n = 0;
+		while(*ss2 != *enter){
+			memset(tmp, '\0', sizeof(char)*(1024+1));
+			sprintf(ss2, "%s", my_csv(ss2, tmp));
+			if (n == 0){
+				//printf("%s, ",tmp);
+				data->key = (char *)malloc(sizeof(char)*(strlen(tmp)+1));
+				strcpy(data->key,tmp);
+				//sprintf(data->key,"%s",tmp);
+			}
+			if (n == effect){
+				//printf("%s \n", tmp);
+				data->value = (char *)malloc(sizeof(char)*(strlen(tmp)+1));
+				strcpy(data->value, tmp);
+			}
+
+			n++;
+		}
+
+		//printf("%s,%s\n",data->key,data->value);
+		if (chtbl_insert_kv(htbl,data) != 0){
+			return 1;
+		}
+
+		free(ss2);
+		line_num++;
+	}
+
+	close(fpi);
+	return 0;
+}
+
+void remove_setitem_hash(CHTbl * htbl)
 {
 	chtbl_destroy(htbl);
 	return ;
