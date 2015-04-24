@@ -16,7 +16,7 @@ start)
 	;;
 stop)
 	ifconfig lo:0 down
-	route del $WEB_VIP 
+	#route del $WEB_VIP 
 	#echo "0" >/proc/sys/net/ipv4/conf/lo/arp_ignore
         #echo "0" >/proc/sys/net/ipv4/conf/lo/arp_announce
         #echo "0" >/proc/sys/net/ipv4/conf/all/arp_ignore
