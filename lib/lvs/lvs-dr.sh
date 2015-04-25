@@ -15,19 +15,19 @@ start)
 	#set lvs vip for dr
 	/sbin/ifconfig eth0:0 $WEB_VIP broadcast $WEB_VIP netmask 255.255.255.255 up
 	/sbin/route add -host $WEB_VIP dev eth0:0
-	#echo "1" >/proc/sys/net/ipv4/ip_forward
-	#/sbin/ipvsadm -C
-	#/sbin/ipvsadm --set 30 5 60
-	/sbin/ipvsadm -A -t $WEB_VIP:80 -s rr -p 10
-	/sbin/ipvsadm -a -t $WEB_VIP:80 -r $WEB_RIP1:80 -g
-	/sbin/ipvsadm -a -t $WEB_VIP:80 -r $WEB_RIP2:80 -g
+	echo "1" > /proc/sys/net/ipv4/ip_forward
+	/sbin/ipvsadm -C
+	/sbin/ipvsadm --set 30 5 60
+	/sbin/ipvsadm -A -t $WEB_VIP:80 -s wrr -p 30
+	/sbin/ipvsadm -a -t $WEB_VIP:80 -r $WEB_RIP1:80 -g -w 1
+	/sbin/ipvsadm -a -t $WEB_VIP:80 -r $WEB_RIP2:80 -g -w 1
 	
 	/sbin/ipvsadm
 	;;
 
 stop)
-	#echo "0" >/proc/sys/net/ipv4/ip_forward
-	#/sbin/ipvsadm -C
+	echo "0" > /proc/sys/net/ipv4/ip_forward
+	/sbin/ipvsadm -C
 	ifconfig eth0:0 down
 	#route del $WEB_VIP
 	echo "ipvsadm stoped"
