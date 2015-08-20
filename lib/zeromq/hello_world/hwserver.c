@@ -1,3 +1,8 @@
+/*
+ * hello world server 
+ * gcc -o hwserver hwserver.c -I /usr/local/zeromq/include -L/usr/local/zeromq/lib/ -lzmq
+ * */
+
 #include <zmq.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -7,7 +12,7 @@
 int main (void)
 {
 	void *context = zmq_ctx_new();
-	void *responder = zmq_socket();
+	void *responder = zmq_socket(context, ZMQ_REP);
 	int rc = zmq_bind(responder, "tcp://127.0.0.1:5555");
 	assert(rc == 0);
 

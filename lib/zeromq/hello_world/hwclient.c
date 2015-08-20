@@ -1,3 +1,8 @@
+/*
+ * hello world client 
+ * gcc -o hwclient hwclient.c -I /usr/local/zeromq/include -L /usr/local/zeromq/lib -lzmq
+ *
+ * */
 #include <zmq.h>
 #include <string.h>
 #include <stdio.h>
@@ -11,7 +16,7 @@ int main (void)
 	zmq_connect(requester, "tcp://127.0.0.1:5555");
 
 	int request_nbr;
-	for (request_nbr = 0; request_nbr != 10; requester++){
+	for (request_nbr = 0; request_nbr != 10; request_nbr++){
 		char buffer[10];
 		printf("Sending Hello %d...\n", request_nbr);
 		zmq_send(requester, "Hello" ,5, 0);
