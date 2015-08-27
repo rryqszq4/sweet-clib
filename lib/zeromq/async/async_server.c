@@ -49,3 +49,41 @@ void *server_task(void *args)
 	zctx_destroy(&ctx);
 	return NULL;
 }
+
+
+static void 
+server_worker (void *args, zctx_t *ctx, void *pipe)
+{
+	void *worker = zsocket_new(ctx, ZMQ_DEALER);
+	zsocket_connect(worker, "inproc://backend");
+
+	while (true){
+		zmsg_t *msg = zmsg_recv(worker);
+		zframe_t *indentity = zmsg_pop(msg);
+		zframe_t *content = zmsg_pop(msg);
+		assert(content);
+		zmsg_destroy(&msg);
+
+		int reply, replies = randof(5);
+		for (reply = 0; reply < replies; reply++){
+			zclock_sleep(randof(1000)+1);
+			zframe_send(&identity, worker, ZFRAME_REUSE + ZFRAME_MORE);
+			zframe_send(&content, worker, ZFRAME_REUSE);
+		}
+		zframe_destroy(&identity);
+		zframe_destroy(&content);
+	}
+
+
+}
+
+int main (void)
+{
+	zthread_new(client_task, NULL);
+	zthread_new(client_task, NULL);
+	zthread_new(client_task, NULL);
+	zthread_new(server_task, NULL);
+	zclock_sleep(5 * 1000);
+	return 0;
+}
+
