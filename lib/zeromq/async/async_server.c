@@ -1,3 +1,9 @@
+/**
+	gcc -o async_server async_server.c -I/usr/local/czmq/include \
+	-I/usr/local/zeromq/include -L/usr/local/zeromq/lib -lzmq \
+	-L/usr/local/czmq/lib -lczmq
+*/
+
 #include "czmq.h"
 
 static void *
@@ -30,6 +36,8 @@ client_task (void *args)
 	return NULL;
 }
 
+static void server_worker(void *args, zctx_t *ctx, void *pipe);
+
 void *server_task(void *args)
 {
 	zctx_t *ctx = zctx_new();
@@ -59,7 +67,7 @@ server_worker (void *args, zctx_t *ctx, void *pipe)
 
 	while (true){
 		zmsg_t *msg = zmsg_recv(worker);
-		zframe_t *indentity = zmsg_pop(msg);
+		zframe_t *identity = zmsg_pop(msg);
 		zframe_t *content = zmsg_pop(msg);
 		assert(content);
 		zmsg_destroy(&msg);
