@@ -29,3 +29,23 @@ client_task (void *args)
 	zctx_destroy(&ctx);
 	return NULL;
 }
+
+void *server_task(void *args)
+{
+	zctx_t *ctx = zctx_new();
+	void *frontend = zsocket_new(ctx, ZMQ_ROUTER);
+	zsocket_bind(frontend, "tcp://127.0.0.1:5570");
+
+	void *backend = zsocket_new(ctx, ZMQ_DEALER);
+	zsocket_bind(backend, "inproc://backend");
+
+	int thread_nbr;
+	for (thread_nbr = 0; thread_nbr < 5; thread_nbr++){
+		zthread_fork(ctx, server_worker, NULL);
+	}
+
+	zmq_proxy(frontend, backend, NULL);
+
+	zctx_destroy(&ctx);
+	return NULL;
+}
