@@ -1,6 +1,6 @@
 #include "czmq.h"
 
-#define WORKER_REPLY "\001"
+#define WORKER_READY "\001"
 
 int main(void)
 {
@@ -30,7 +30,7 @@ int main(void)
 			zlist_append(workers, identity);
 
 			zframe_t *frame = zmsg_first(msg);
-			if (memcmp(zframe_data(frame), WORKER_REPLY, 1) == 0)
+			if (memcmp(zframe_data(frame), WORKER_READY, 1) == 0)
 				zmsg_destroy(&msg);
 			else 
 				zmsg_send(&msg, frontend);

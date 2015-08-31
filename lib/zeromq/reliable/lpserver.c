@@ -16,7 +16,9 @@ int main (void)
 		if (cycles > 3 && randof(3) == 0){
 			printf("I: simulating a crash\n");
 			break;
-		}else if (cycles > 3 && randof(3)){
+		}
+		else 
+		if (cycles > 3 && randof(3) == 0){
 			printf("I: simulating CPU overload\n");
 			sleep(2);
 		}
