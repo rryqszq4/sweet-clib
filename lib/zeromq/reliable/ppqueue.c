@@ -96,7 +96,7 @@ int main(void)
 		if (rc == -1)
 			break;
 
-		if (items[0].revent & ZMQ_POLLIN){
+		if (items[0].revents & ZMQ_POLLIN){
 			zmsg_t *msg = zmsg_recv(backend);
 			if (!msg)
 				break;
@@ -116,7 +116,7 @@ int main(void)
 			else
 				zmsg_send(&msg, frontend);
 		}
-		if (items[1].revent & ZMQ_POLLIN){
+		if (items[1].revents & ZMQ_POLLIN){
 			zmsg_t *msg = zmsg_recv(frontend);
 			if (!msg)
 				break;
