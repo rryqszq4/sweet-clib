@@ -29,7 +29,7 @@ mdcli_new(char *broker, int verbose)
 	self->ctx = zctx_new();
 	self->broker = strdup(broker);
 	self->verbose = verbose;
-	self->timout = 2500;
+	self->timeout = 2500;
 	self->retries = 3;
 
 	s_mdcli_connect_to_broker(self);
@@ -74,7 +74,7 @@ mdcli_send(mdcli_t *self, char *service, zmsg_t **request_p)
 		zmsg_t *msg = zmsg_dup(request);
 		zmsg_send(&msg, self->client);
 
-		zmp_pollitem_t items [] = {
+		zmq_pollitem_t items [] = {
 			{self->client, 0, ZMQ_POLLIN, 0}
 		};
 
@@ -104,7 +104,7 @@ mdcli_send(mdcli_t *self, char *service, zmsg_t **request_p)
 		}
 		else 
 		if (--retries_left){
-			if (self-verbose)
+			if (self->verbose)
 				zclock_log("W: no reply, reconnecting...");
 			s_mdcli_connect_to_broker(self);
 		}

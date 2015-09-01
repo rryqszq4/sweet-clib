@@ -1,3 +1,8 @@
+/**
+gcc -o mdclient mdclient.c -I/usr/local/czmq/include -I/usr/local/zeromq/include 
+-L/usr/local/zeromq/lib -lzmq -L/usr/local/czmq/lib -lczmq
+*/
+
 #include "mdcliapi.c"
 
 int main (int argc, char *argv[])

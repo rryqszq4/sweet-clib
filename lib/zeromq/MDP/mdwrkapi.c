@@ -114,7 +114,7 @@ mdwrk_recv(mdwrk_t *self, zmsg_t **reply_p)
 		zmq_pollitem_t items [] = {
 			{self->worker, 0, ZMQ_POLLIN, 0}
 		};
-		int rc = zmq_poll(itmes, 1, self->hearbeat * ZMQ_POLL_MSEC);
+		int rc = zmq_poll(items, 1, self->heartbeat * ZMQ_POLL_MSEC);
 		if (rc == -1)
 			break;
 
@@ -124,9 +124,9 @@ mdwrk_recv(mdwrk_t *self, zmsg_t **reply_p)
 				break;
 			if (self->verbose){
 				zclock_log("I: received messge from broker:");
-				zsg_dump(msg);
+				zmsg_dump(msg);
 			}
-			self->liveness = HEARBEAT_LIVENESS;
+			self->liveness = HEARTBEAT_LIVENESS;
 
 			assert(zmsg_size(msg) >= 3);
 
@@ -165,7 +165,7 @@ mdwrk_recv(mdwrk_t *self, zmsg_t **reply_p)
 			s_mdwrk_connect_to_broker(self);
 		}
 
-		if (zclock_time() > self->hearbeat_at){
+		if (zclock_time() > self->heartbeat_at){
 			s_mdwrk_send_to_broker(self, MDPW_HEARTBEAT, NULL, NULL);
 			self->heartbeat_at = zclock_time() + self->heartbeat;
 		}
