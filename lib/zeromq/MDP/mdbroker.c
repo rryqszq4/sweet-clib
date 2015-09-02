@@ -250,7 +250,83 @@ s_service_dispatch(service_t *self, zmsg_t *msg)
 
 }
 
+static worker_t *
+s_worker_require(broker_t *self, zframe_t *identity)
+{
+	assert(identity);
 
+	char *id_string = zframe_strhex(identity);
+	worker_t *worker = (worker_t *)zhash_lookup(self->workers, id_string);
+
+	if (worker == NULL){
+		worker = (worker_t *)zmalloc(sizeof(worker_t));
+		worker->broker = self;
+		worker->id_string = id_string;
+		worker->identity = zframe_dup(identity);
+		zhash_insert(self->workers, id_string, worker);
+		zhash_freefn(self->workers, id_string, s_worker_destroy);
+		if (self->verbose)
+			zclock_log("I: registering new worker: %s", id_string);
+	}
+	else 
+		free(id_string);
+	return worker;
+}
+
+static void
+s_worker_delete(worker_t *self, int disconnect)
+{
+	assert(self);
+	if (disconnect)
+		s_worker_send(self, MDPW_DISCONNECT, NULL, NULL);
+
+	if (self->service){
+		zlist_remove(self->service->waiting, self);
+		self->service->workers--;
+	}
+	zlist_remove(self->broker->waiting, self);
+
+	zhash_delete(self->broker->workers, self->id_string);
+}
+
+static void
+s_worker_destroy(void *argument)
+{
+	worker_t *self = (worker_t *)argument;
+	zframe_destroy(&self->identity);
+	free(self->id_string);
+	free(self);
+}
+
+static void
+s_worker_send(worker_t *self, char *command, char *option, zmsg_t *msg)
+{
+	msg = msg ? zmsg_dup(msg) : zmsg_new();
+
+	if (option)
+		zmsg_pushstr(msg, option);
+	zmsg_pushstr(msg, command);
+	zmsg_pushstr(msg, MDPW_WORKER);
+
+	zmsg_wrap(msg, zframe_dup(self->identity));
+
+	if (self->broker->verbose){
+		zclock_log("I: sending %s to worker", mdps_commands[(int) *command]);
+		zmsg_dump(msg);
+	}
+	zmsg_send(&msg, self->broker->socket);
+
+}
+
+static void
+s_worker_waiting(worker_t *self)
+{
+	assert(self->broker);
+	zlist_append(self->broker->waiting, self);
+	zlist_append(self->service->waiting, self);
+	self->expiry = zclock_time() + HEARTBEAT_EXPIRY;
+	s_service_dispatch(self->service, NULL);
+}
 
 
 
