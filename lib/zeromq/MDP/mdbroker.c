@@ -1,3 +1,8 @@
+/**
+gcc -o mdbroker mdbroker.c -I/usr/local/czmq/include -I/usr/local/zeromq/include
+ -L/usr/local/zeromq/lib -lzmq -L/usr/local/czmq/lib -lczmq
+*/
+
 #include "czmq.h"
 #include "mdp.h"
 
@@ -6,7 +11,7 @@
 #define HEARTBEAT_EXPIRY	HEARTBEAT_INTERVAL * HEARTBEAT_LIVENESS
 
 typedef struct {
-	zctx *ctx;
+	zctx_t *ctx;
 	void *socket;
 	int verbose;
 	char *endpoint;
@@ -54,7 +59,7 @@ static void s_worker_waiting(worker_t *self);
 static broker_t *
 s_broker_new(int verbose)
 {
-	broker *self = (broker_t *)zmalloc(sizeof(broker_t));
+	broker_t *self = (broker_t *)zmalloc(sizeof(broker_t));
 
 	self->ctx = zctx_new();
 	self->socket = zsocket_new(self->ctx, ZMQ_ROUTER);
@@ -75,7 +80,7 @@ s_broker_destroy(broker_t **self_p)
 		zctx_destroy(&self->ctx);
 		zhash_destroy(&self->services);
 		zhash_destroy(&self->workers);
-		zlist_destroy(*self->waiting);
+		zlist_destroy(&self->waiting);
 		free(self);
 		*self_p = NULL;
 	}
@@ -107,7 +112,7 @@ s_broker_worker_msg(broker_t *self, zframe_t *sender, zmsg_t *msg)
 			s_worker_delete(worker, 1);
 		else {
 			zframe_t *service_frame = zmsg_pop(msg);
-			worker->service = service_require(self, service_frame);
+			worker->service = s_service_require(self, service_frame);
 			worker->service->workers++;
 			s_worker_waiting(worker);
 			zframe_destroy(&service_frame);
@@ -180,9 +185,9 @@ s_broker_client_msg(broker_t *self, zframe_t *sender, zmsg_t *msg)
 }
 
 static void
-s_broker_purge(broker *self)
+s_broker_purge(broker_t *self)
 {
-	worker *worker = (worker_t *)zlist_first(self->waiting);
+	worker_t *worker = (worker_t *)zlist_first(self->waiting);
 	while(worker){
 		if (zclock_time() < worker->expiry)
 			break;
@@ -221,7 +226,7 @@ s_service_require(broker_t *self, zframe_t *service_frame)
 static void
 s_service_destroy(void *argument)
 {
-	service_t *service = (service *)argument;
+	service_t *service = (service_t *)argument;
 	while (zlist_size(service->requests)){
 		zmsg_t *msg = zlist_pop(service->requests);
 		zmsg_destroy(&msg);
