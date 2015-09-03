@@ -113,6 +113,9 @@ mdcli_recv(mdcli_t *self)
 	
 	if (zctx_interrupted)
 		printf("W: interrupt received, killing client...\n");
+	else
+	if (self->verbose)
+		zclock_log("W: permanent error, abandoning request");
 	
 	return NULL;
 }

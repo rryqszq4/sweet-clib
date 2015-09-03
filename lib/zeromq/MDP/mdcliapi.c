@@ -56,6 +56,13 @@ mdcli_set_timeout(mdcli_t *self, int timeout)
 	self->timeout = timeout;
 }
 
+void
+mdcli_set_retries(mdcli_t *self, int retries)
+{
+	assert(self);
+	self->retries = retries;
+}
+
 zmsg_t *
 mdcli_send(mdcli_t *self, char *service, zmsg_t **request_p)
 {

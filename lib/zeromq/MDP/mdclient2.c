@@ -16,6 +16,7 @@ int main (int argc, char *argv[])
 		zmsg_pushstr(request, "Hello world");
 		mdcli_send(session, "echo", &request);
 	}
+
 	for (count = 0; count < 100000; count++){
 		zmsg_t *reply = mdcli_recv(session);
 		if (reply)
