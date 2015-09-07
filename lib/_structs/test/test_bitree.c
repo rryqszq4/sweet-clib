@@ -60,7 +60,7 @@ insert_int(BiTree *tree, int i)
 	BiTreeNode *node, *prev;
 	int direction, *data;
 
-	node = tree->node;
+	node = tree->root;
 	direction = 0;
 
 	while (!bitree_is_eob(node)){
@@ -89,6 +89,26 @@ insert_int(BiTree *tree, int i)
 		return bitree_ins_right(tree, prev, data);
 
 	return -1;
+}
+
+static BiTreeNode *
+search_int(BiTree *tree, int i)
+{
+	BiTreeNode *node;
+
+	node = bitree_root(tree);
+
+	while (!bitree_is_eob(node)){
+		if (i == *(int *)bitree_data(node)){
+			return node;
+		}else if (i < *(int *)bitree_data(node)){
+			node = bitree_left(node);
+		}else {
+			node = bitree_right(node);
+		}
+	}
+
+	return NULL;
 }
 
 
