@@ -12,10 +12,10 @@ print_preorder(const BiTreeNode *node)
 		fprintf(stdout, "Node=%03d\n", *(int *)bitree_data(node));
 
 		if (!bitree_is_eob(bitree_left(node)))
-			printf_preorder(bitree_left(node));
+			print_preorder(bitree_left(node));
 
 		if (!bitree_is_eob(bitree_right(node)))
-			printf_preorder(bitree_right(node));
+			print_preorder(bitree_right(node));
 	}
 	return ;
 }
@@ -111,7 +111,57 @@ search_int(BiTree *tree, int i)
 	return NULL;
 }
 
+int 
+main(int argc, char **argv)
+{
+	BiTree tree;
+	BiTreeNode *node;
+	int i;
 
+	bitree_init(&tree, free);
+
+	fprintf(stdout, "Inserting some nodes\n");
+
+	if (insert_int(&tree, 20) != 0)
+		return 1;
+
+	if (insert_int(&tree, 15) != 0)
+		return 1;
+
+	if (insert_int(&tree, 10) != 0)
+		return 1;
+
+	if (insert_int(&tree, 5) != 0)
+		return 1;
+/*
+	if (insert_int(&tree, 25) != 0)
+		return 1;
+
+	if (insert_int(&tree, 70) != 0)
+		return 1;
+
+	if (insert_int(&tree, 80) != 0)
+		return 1;
+
+	if (insert_int(&tree, 23) != 0)
+		return 1;
+
+	if (insert_int(&tree, 26) != 0)
+		return 1;
+
+	if (insert_int(&tree, 5) != 0)
+		return 1;
+*/
+
+	fprintf(stdout, "Tree size is %d", bitree_size(&tree));
+	fprintf(stdout, "(Preorder traversal)\n");
+	print_preorder(bitree_root(&tree));
+
+	fprintf(stdout, "Destroying the tree\n");
+	bitree_destroy(&tree);
+
+	return 0;
+}
 
 
 
