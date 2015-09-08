@@ -1,3 +1,7 @@
+/**
+	gcc -o test_bitree test_bitree.c ../bitree.c
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -158,6 +162,24 @@ main(int argc, char **argv)
 	fprintf(stdout, "Tree size is %d", bitree_size(&tree));
 	fprintf(stdout, "(Preorder traversal)\n");
 	print_preorder(bitree_root(&tree));
+
+	i = 30;
+	if ((node = search_int(&tree, i)) == NULL){
+		fprintf(stdout, "Could not find %03d\n", i);
+	}else {
+		fprintf(stdout, "Found %03d...Removing the left tree below it\n", i);
+		bitree_rem_left(&tree, node);
+		fprintf(stdout, "Tree size is %d\n", bitree_size(&tree));
+		fprintf(stdout, "(Preorder traversal)\n");
+		print_preorder(bitree_root(&tree));
+	}
+
+
+
+
+
+
+
 
 	fprintf(stdout, "Destroying the tree\n");
 	bitree_destroy(&tree);
