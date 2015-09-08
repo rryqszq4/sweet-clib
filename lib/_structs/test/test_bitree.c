@@ -81,6 +81,8 @@ insert_int(BiTree *tree, int i)
 
 	*data = i;
 
+	printf("%d\n", direction);
+
 	if (direction == 0)
 		return bitree_ins_left(tree, NULL, data);
 	if (direction == 1)
@@ -131,9 +133,9 @@ main(int argc, char **argv)
 	if (insert_int(&tree, 10) != 0)
 		return 1;
 
-	if (insert_int(&tree, 5) != 0)
+	if (insert_int(&tree, 30) != 0)
 		return 1;
-/*
+
 	if (insert_int(&tree, 25) != 0)
 		return 1;
 
@@ -151,7 +153,7 @@ main(int argc, char **argv)
 
 	if (insert_int(&tree, 5) != 0)
 		return 1;
-*/
+
 
 	fprintf(stdout, "Tree size is %d", bitree_size(&tree));
 	fprintf(stdout, "(Preorder traversal)\n");

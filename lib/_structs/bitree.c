@@ -67,6 +67,9 @@ int bitree_ins_right(BiTree *tree, BiTreeNode *node, const void *data)
 		position = &node->right;
 	}
 
+	if ((new_node = (BiTreeNode *)malloc(sizeof(BiTreeNode))) == NULL)
+		return -1;
+
 	new_node->data = (void *)data;
 	new_node->left = NULL;
 	new_node->right = NULL;
