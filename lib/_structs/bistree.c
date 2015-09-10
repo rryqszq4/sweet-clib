@@ -97,6 +97,64 @@ rotate_right(BiTreeNode **node)
 	return;
 }
 
+static void
+destroy_left(Bistree *tree, BiTreeNode *node)
+{
+	BiTreeNode **position;
+
+	if (bitree_size(tree) == 0)
+		return ;
+
+	if (node == NULL)
+		position = &tree->root;
+	else
+		position = &node->left;
+
+	if (*position != NULL){
+		destroy_left(tree, *position);
+		destroy_right(tree, *position);
+		if (tree->destroy != NULL){
+			tree->destroy(((AvlNode *)(*position)->data)->data);
+		}
+
+		free((*position)->data);
+		free(*position);
+		*position = NULL:
+		tree->size--;
+	}
+	return ;
+}
+
+static void
+destroy_right(Bistree *tree, BiTreeNode *node)
+{
+	BiTreeNode **position;
+
+	if (bistree_size(tree) == 0)
+		return ;
+
+	if (node == NULL)
+		position = &tree->root;
+	else
+		position = &tree->right;
+
+	if (*position != NULL){
+		destroy_left(tree, *position);
+		destroy_right(tree, *position);
+
+		if (tree->destroy != NULL){
+			tree->destroy(((AvlNode *)(*position)->data)->data);
+		}
+
+		free((*position)->data);
+		free(*position);
+		*position = NULL;
+		tree->size--;
+	}
+
+	return ;
+}
+
 
 
 
