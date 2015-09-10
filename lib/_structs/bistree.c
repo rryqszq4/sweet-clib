@@ -155,6 +155,108 @@ destroy_right(Bistree *tree, BiTreeNode *node)
 	return ;
 }
 
+static int
+insert(Bistree *tree, BiTreeNode **node, const void *data, int *balanced)
+{
+	AvlNode *avl_data;
+
+	int cmpval, retval;
+
+	if (bitree_is_eob(*node)){
+		if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL)
+			return -1;
+		avl_data->factor = AVL_BALANCED;
+		avl_data->hidden = 0;
+		avl_data->data = (void *)data;
+
+		return bitree_ins_left(tree, *node, avl_data);
+	}else {
+		cmpval = tree->compare(data, ((AvlNode *)bitree_data(*node))->data);
+		if (cpmval < 0){
+			if (bitree_is_eob(bitree_left(*node))){
+				if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL)
+					return -1;
+
+				avl_data->factor = AVL_BALANCED;
+				avl_data->hidden = 0;
+				avl_data->data = (void *)data;
+
+				if (bitree_ins_left(tree, *node, val_data) != 0)
+					return -1;
+				*balanced = 0;
+			}else {
+				if ((retval = insert(tree, &bitree_left(*node), data, balanced)) != 0){
+					return retval;
+				}
+			}
+			
+			if (!(*balanced)){
+				switch (((AvlNode *)bitree_data(*node))->factor){
+					case AVL_LFT_HEAVY:
+						rotate_left(node);
+						*balanced = 1;
+						break;
+					case AVL_BALANCED:
+						((AvlNode *)bitree_data(*node))->factor = AVL_LFT_HEAVY;
+						break;
+					case AVL_RGT_HEAVY:
+						((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+						*balanced = 1;						
+				}
+			}
+
+		}else if (cmpval > 0){
+			if (bitree_is_eob(bitree_right(*node))){
+				if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL)
+					return -1;
+
+				avl_data->factor = AVL_BALANCED;
+				avl_data->hidden = 0;
+				avl_data->data = (void *)data;
+
+				if (bistrr_ins_right(tree, *node, avl_data) != 0)
+					return -1;
+
+				*balanced = 0;
+			}else {
+				if ((retval = insert(tree, &bitree_right(*node), data, balanced)) != 0){
+					return retval;
+				}
+			}
+
+			if (!(*balanced)){
+				switch (((AvlNode *)bitree_data(*node))->factor){
+
+					case AVL_LFT_HEAVY:
+						((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+						*balanced = 1;
+						break;
+					case AVL_BALANCED:
+						((AvlNode *)bitree_node(*node))->factor = AVL_RGT_HEAVY;
+						break;
+					case AVL_RGT_HEAVY:
+						rotate_right(node);
+						*balanced = 1;
+				}
+			}
+
+		}else {
+			if (!((AvlNode *)bitree_data(*node))->hidden){
+				return 1;
+			}else {
+				if (tree->destroy != NULL){
+					tree->destroy(((AvlNode *)bitree_data(*node))->data);
+				}
+				((AvlNode *)bitree_data(*node))->data = (void *)data;
+				((AvlNode *)bitree_data(*node))->hidden = 0;
+				*balanced = 1;
+			}
+		} 
+	}
+
+	return 0;
+}
+
 
 
 
