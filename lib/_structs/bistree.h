@@ -14,7 +14,7 @@ typedef struct AvlNode_
 	int 	factor;
 } AvlNode;
 
-typedef bitree Bistree;
+typedef biTree BisTree;
 
 void bistree_init(Bistree *tree, int (*compare)(const void *key1, const void *key2), void (*destroy)(void *data));
 void bistree_destroy(Bistree *tree);

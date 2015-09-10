@@ -3,7 +3,7 @@
 
 #include "bistree.h"
 
-static void destroy_right(Bistree *tree, BiTreeNode *node);
+static void destroy_right(BisTree *tree, BiTreeNode *node);
 
 static void 
 rotate_left(BiTreeNode **node)
@@ -98,7 +98,7 @@ rotate_right(BiTreeNode **node)
 }
 
 static void
-destroy_left(Bistree *tree, BiTreeNode *node)
+destroy_left(BisTree *tree, BiTreeNode *node)
 {
 	BiTreeNode **position;
 
@@ -126,11 +126,11 @@ destroy_left(Bistree *tree, BiTreeNode *node)
 }
 
 static void
-destroy_right(Bistree *tree, BiTreeNode *node)
+destroy_right(BisTree *tree, BiTreeNode *node)
 {
 	BiTreeNode **position;
 
-	if (bistree_size(tree) == 0)
+	if (bitree_size(tree) == 0)
 		return ;
 
 	if (node == NULL)
@@ -156,7 +156,7 @@ destroy_right(Bistree *tree, BiTreeNode *node)
 }
 
 static int
-insert(Bistree *tree, BiTreeNode **node, const void *data, int *balanced)
+insert(BisTree *tree, BiTreeNode **node, const void *data, int *balanced)
 {
 	AvlNode *avl_data;
 
@@ -214,7 +214,7 @@ insert(Bistree *tree, BiTreeNode **node, const void *data, int *balanced)
 				avl_data->hidden = 0;
 				avl_data->data = (void *)data;
 
-				if (bistrr_ins_right(tree, *node, avl_data) != 0)
+				if (bistree_ins_right(tree, *node, avl_data) != 0)
 					return -1;
 
 				*balanced = 0;
@@ -306,7 +306,42 @@ lookup(BisTree *tree, BiTreeNode *node, void **data)
 	return retval;
 }
 
+void 
+bistree_init(BisTree *tree, int (*compare)(const void *key1, const void *key2), void(*destroy)(void *data))
+{
+	bitree_init(tree, destroy);
+	tree->compare = compare;
+	return ;
+}
 
+void 
+bistree_destroy(BisTree *tree)
+{
+	destroy_left(tree, NULL);
+
+	memset(tree, 0, sizeof(BisTree));
+	return ;
+}
+
+int
+bistree_insert(BisTree *tree, const void *data)
+{
+	int balanced = 0;
+
+	return insert(tree, &bitree_root(tree), data, &balanced);
+}
+
+int
+bistree_remove(BisTree *tree, const void *data)
+{
+	return hide(tree, bitree_root(tree), data);
+}
+
+int
+bistree_lookup(BisTree *tree, void **data)
+{
+	return lookup(tree, bitree_root(tree), data);
+}
 
 
 
