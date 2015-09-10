@@ -6,7 +6,8 @@ C language programming library, sweet is a famours player.
 
 ## Data Structure
 
-#### list
+#### List
+Linked Lists
 ```c
 void list_init(List *list, void (destroy)(void *data));
 void list_destroy(List *list);
@@ -21,7 +22,7 @@ int list_rem_next(List *list, ListElmt *element, void **data);
 #define list_next(elements)	((element)->next)
 ```
 
-#### stack
+#### Stack
 ```c
 typedef List Stack;
 
@@ -36,7 +37,7 @@ int stack_pop(Stack *stack, void **data);
 ```
 
 
-#### queue
+#### Queue
 ```c
 typedef List Queue;
 
@@ -50,7 +51,8 @@ int queue_dequeue(Queue *queue, void **data);
 #define queue_size list_size
 ```
 
-#### hash table
+#### Hash Table
+use Chained Hash Table 
 ```c
 int chtbl_init(CHTbl *htbl, int buckets, int (*h)(const void *key),int (*match)(const void *key1, const void *key2), void (*destroy)(void *data));
 int chtbl_init_kv(CHTbl *htbl, int buckets, int (*h)(const void *key),int (*match)(const SweetListKv *key1, const SweetListKv *key2), void (*destroy)(void *data));
@@ -66,7 +68,7 @@ SweetListKv *chtbl_find_kv(const CHTbl *htbl, SweetListKv **data);
 #define chtbl_size(htbl) ((htbl)->size)
 ```
 
-#### binary tree
+#### Binary Tree
 ```c
 void bitree_init(BiTree *tree, void (*destroy)(void *data));
 void bitree_destroy(BiTree *tree);
@@ -85,7 +87,7 @@ int bitree_merge(BiTree *merge, BiTree *left, BiTree *right, const void *data);
 #define bitree_right(node)		((node)->right)
 ```
 
-#### binary search tree
+#### Binary Search Tree
 but use AVL tree
 ```c
 typedef biTree BisTree;
@@ -98,7 +100,6 @@ int bistree_lookup(Bistree *tree, void **data);
 
 #define bistree_size(tree) ((tree)->size);
 ```
-
 
 
 
