@@ -1,3 +1,8 @@
+/**
+gcc -o clonesrv1 clonesrv1.c -I/usr/local/czmq/include -I/usr/local/zeromq/include \
+ -L/usr/local/zeromq/lib -lzmq -L/usr/local/czmq/lib -lczmq
+*/
+
 #include "kvsimple.c"
 
 int main (void)

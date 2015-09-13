@@ -20,7 +20,7 @@ kvmsg_new(int64_t sequence)
 {
 	kvmsg_t *self;
 
-	*self = (kvmsg_t *)zmalloc(sizeof(kvmsg_t));
+	self = (kvmsg_t *)zmalloc(sizeof(kvmsg_t));
 	kvmsg_set_sequence(self, sequence);
 	return self;
 }
@@ -189,7 +189,7 @@ kvmsg_body(kvmsg_t *self)
 }
 
 void
-kvmsg_set_body(kvsmg_t *self, byte *body, size_t size)
+kvmsg_set_body(kvmsg_t *self, byte *body, size_t size)
 {
 	assert(self);
 	zmq_msg_t *msg = &self->frame[FRAME_BODY];
@@ -261,7 +261,7 @@ kvmsg_dump(kvmsg_t *self)
 	}
 }
 
-int kvmsg_key(int verbose)
+int kvmsg_test(int verbose)
 {
 	kvmsg_t *kvmsg;
 
